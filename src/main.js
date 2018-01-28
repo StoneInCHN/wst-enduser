@@ -5,11 +5,13 @@ import store from './store'
 import FastClick from 'fastclick'
 import api from './apis'
 
+import './reset.css'
+
+
 Vue.prototype.$api = api
-FastClick.attach(document.body)
+//FastClick.attach(document.body)
 Vue.config.productionTip = false
 
-require('./mock')
 
 new Vue({
   el: '#app',
