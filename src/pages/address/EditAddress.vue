@@ -1,0 +1,58 @@
+<template>
+  <div class="App-add-address">
+    <Button class="App-add-address-save" size="mini" @click="save">保存</Button>
+    <h4>编辑收货地址</h4>
+    <div class="title">联系人</div>
+    <CellGroup>
+      <Field v-model="user.name" label="用户名" placeholder="请填写收货人姓名" />
+      <Field v-model="user.tel" label="电话" placeholder="请填写收货手机号码" />
+    </CellGroup>
+    <div class="title">收货地址</div>
+    <CellGroup>
+      <van-field v-model="user.address" type="textarea" label="小区/大厦/学校" placeholder="例：中德英伦联邦" />
+      <van-field v-model="user.houseNum" label="楼号-门牌号" placeholder="例：16号楼1001室" />
+    </CellGroup>
+  </div>
+</template>
+<script>
+import { Field, CellGroup, Button } from "vant";
+
+export default {
+  name: "editAddress",
+  components: {
+    Field,
+    CellGroup,
+    Button
+  },
+  computed: {
+      user(){
+          console.log(this.$store.getters.getEditAddress)
+          return this.$store.getters.getEditAddress
+      }
+  },
+  methods: {
+    save() {
+      console.log(this.user)
+      this.$router.push("addressList")
+    }
+  }
+};
+</script>
+<style>
+  .App-add-address{
+    padding: 15px;
+    position: relative;
+  }
+  .App-add-address-save{
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    border: none;
+  }
+  .App-add-address h4{
+    text-align: center;
+  }
+  .App-add-address .title{
+    margin: 10px 0;
+  }
+</style>

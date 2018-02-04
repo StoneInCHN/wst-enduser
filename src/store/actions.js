@@ -4,6 +4,9 @@ const actions = {
 	},
 	setResultNum({commit}, payload){
 		commit("setResultNum", payload)
+	},
+	setEditAddress({commit}, payload){
+		commit("setEditAddress", payload)
 	}
 }
 

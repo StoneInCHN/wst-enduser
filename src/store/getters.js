@@ -7,6 +7,9 @@ const getters = {
 	},
 	getResultNum: state => {
 		return state.resultNum
+	},
+	getEditAddress: state => {
+		return state.editAddress
 	}
 }
 

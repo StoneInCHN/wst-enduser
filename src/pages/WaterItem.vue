@@ -5,7 +5,7 @@
 			<p>{{goods.title}}</p>
 		</div>
 		<div class="warp">
-			<van-stepper v-model="goods.count" :min="0" :default-value="0"/>
+			<Stepper v-model="goods.count" :min="0" :default-value="0"/>
 			<span>￥{{totalPrice}}</span>
 		</div>
 	</li>
@@ -17,7 +17,7 @@ import { Stepper } from 'vant'
 export default{
 	name: 'WaterItem',
 	components: {
-		vanStepper: Stepper
+		Stepper
 	},
 	props: ["goods"],
 	computed: {

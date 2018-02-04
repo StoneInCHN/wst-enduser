@@ -4,6 +4,9 @@ const mutations = {
 	},
 	setResultNum(state, {resultNum}){
 		state.resultNum = resultNum
+	},
+	setEditAddress(state, {editAddress}){
+		state.editAddress = editAddress
 	}
 }
 

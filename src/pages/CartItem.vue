@@ -1,28 +1,28 @@
 <template>
 	<li class="cart-item">
-		<van-row>
-			<van-col span="12" >{{item.title}}</van-col>
-			<van-col span="12" >
+		<Row>
+			<Col span="12" >{{item.title}} </Col>
+			<Col span="12" >
 				<div class="warp">
-					<van-stepper v-model="item.count" :min="0" :default-value="0"/>
+					<Stepper v-model="item.count" :min="0" :default-value="0"/>
 					<span>￥{{totalPrice}}</span>
 				</div>
-			</van-col>
-		</van-row>					
+			</Col>
+		</Row>					
 	</li>
 </template>
 <script>
-import { Button, Icon, Row, Col, Stepper } from 'vant'
+import { Icon, Row, Col, Stepper } from 'vant'
 import { numMul } from '../utils'
 
 export default{
 	name: "CartItem",
 	props: ["item"],
 	components:{
-		vanButton: Button,
-		vanRow: Row,
-		vanCol: Col,
-		vanStepper: Stepper
+		Icon,
+		Row,
+		Col,
+		Stepper
 	},
 	computed: {
 		totalPrice(){

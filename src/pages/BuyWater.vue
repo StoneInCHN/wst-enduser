@@ -2,25 +2,26 @@
 	<div class="goods-warp">
 		<Header/>
 		<div class="water-conent">
-			<van-badge-group class="sideBar" :active-key="activeKey">
-			  <van-badge title="乐百氏" @click="onClick" />
-			  <van-badge title="蓝剑" @click="onClick" />
-			  <van-badge title="蓝光" @click="onClick" />
-			  <van-badge title="农夫山泉" @click="onClick" />
-			</van-badge-group>
+			<BadgeGroup class="sideBar" :active-key="activeKey">
+			  <Badge title="乐百氏" @click="onClick" />
+			  <Badge title="蓝剑" @click="onClick" />
+			  <Badge title="蓝光" @click="onClick" />
+			  <Badge title="农夫山泉" @click="onClick" />
+			</BadgeGroup>
 			<ul class="goods">
-				<waterItem v-for="(item, index) in items" :goods="item" :key="index"/>		
+				<WaterItem v-for="(item, index) in items" :goods="item" :key="index"/>		
 			</ul>
 		</div>
-		<shopping-cart :cartItems="items" />
+		<ShoppingCart :cartItems="items" />
 	</div>
 </template>
 <script>
-
+import vue from 'vue'
 import { BadgeGroup, Badge } from "vant"
 import WaterItem from './WaterItem'
 import ShoppingCart from './ShoppingCart'
 import Header from "../components/Header"
+
 export default{
 	name: "BuyWater",
 	data () {
@@ -42,11 +43,11 @@ export default{
 		}
 	},
 	components:{
-		Header: Header,
-		vanBadge: Badge,
-		vanBadgeGroup: BadgeGroup,
-		waterItem: WaterItem,
-		shoppingCart: ShoppingCart
+		Header,
+		Badge,
+		BadgeGroup,
+		WaterItem,
+		ShoppingCart
 	},
 	methods: {
 		onClick(key) {
@@ -67,6 +68,7 @@ export default{
 	position: absolute;
 	left: 0;
 	top: 0;
+	z-index: 10000;
 }
 .water-conent ul{
 	padding-left: 85px;

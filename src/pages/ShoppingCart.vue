@@ -1,7 +1,7 @@
 <template>
 	<div class="shopping-cart">	
-		<van-row>
-		  <van-col span="14" class="cart-left">
+		<Row>
+		  <Col span="14" class="cart-left">
 		  	<div class="cart-icon" @click="toggleDetails">
 		  		<img src="../assset/images/cart.svg" alt="购物车">
 		  		<span>{{totalCount}}</span>
@@ -10,11 +10,11 @@
 		  		<span>￥{{totalPrice}}</span>
 		  		<span>￥14.00</span>
 		  	</div>
-		  </van-col>
-		  <van-col span="10">
-		    <van-button type="default" size="large" @click="buy">购买</van-button>
-		  </van-col>
-		</van-row>
+		  </Col>
+		  <Col span="10">
+		    <Button type="default" size="large" @click="buy">购买</Button>
+		  </Col>
+		</Row>
 		<transition name="fade">
 			<div class="goods-details" v-show="showDetails" transiton="fade">
 				<div class="goods-details-title">
@@ -29,17 +29,17 @@
 	</div>
 </template>
 <script>
-import { Button, Icon, Row, Col } from 'vant'
+import { Button, Row, Col } from 'vant'
 import CartItem from "./CartItem"
 import { numAdd, numMul } from '../utils'
 
 export default{
 	name: "ShoppingCart",
 	components:{
-		vanButton: Button,
-		vanRow: Row,
-		vanCol: Col,
-		cartItem: CartItem
+		Button,
+		Row,
+		Col,
+		CartItem
 	},
 	props: ["cartItems"],
 	data () {

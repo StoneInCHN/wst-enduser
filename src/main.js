@@ -9,7 +9,7 @@ import './reset.css'
 
 
 Vue.prototype.$api = api
-//FastClick.attach(document.body)
+FastClick.attach(document.body)
 Vue.config.productionTip = false
 
 
