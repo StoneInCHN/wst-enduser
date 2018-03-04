@@ -1,53 +1,91 @@
 <template>
 	<div class="header">
-		<van-button  :disabled="isCall" class="header-phone" @click="call">
-			<van-icon name="phone"/>
-		</van-button>
+		<Button  :disabled="isCall" class="header-phone" @click="call">
+			<Icon name="phone"/>
+		</Button>
 		<p>{{notification}}</p>
 		<p>{{businessTime}}</p>
 	</div>
 </template>
 <script>
-import { Button, Icon} from 'vant'
-
-export default{
-	name: "Header",
-	components:{
-		vanButton: Button,
-		vanIcon: Icon
-	},
-	data () {
-		return{
-			notification: "店家公告",
-			businessTime: "9:00 -- 18:30"
-		}
-	},
-	computed: {
-		isCall(){
-			return true
-		}
-	},
-	methods: {
-		call(){
-			alert("店家已经休息了")
-		}
-	}
-}
+import { Button, Icon } from "vant";
+import { bg } from "@/assets/images";
+export default {
+  name: "Header",
+  components: {
+    Button,
+    Icon
+  },
+  data() {
+    return {
+      notification: "店家公告",
+      businessTime: "9:00 -- 18:30"
+    };
+  },
+  computed: {
+    isCall() {
+      return false;
+    }
+  },
+  methods: {
+    call() {
+      alert("店家已经休息了");
+    }
+  }
+};
 </script>
 <style>
-.header{
-	padding:30px;
-	background-color: #e5e5e5;
-	position: relative;
+.header {
+  padding: 10px;
+  background: #e5e5e5 url("../assets/images/banner.svg");
+  background-size: cover;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 2;
 }
-.header-phone{
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background-color: #e5e5e5;
-	border: none;
+.header-phone {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #00a0e9;
+  border: none;
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#00a0e9), to(#00d6e9));
+  background: -moz-linear-gradient(#00a0e9, #00d6e9);
+  background: -o-linear-gradient(#00a0e9, #00d6e9);
+  background: linear-gradient(top center, #00a0e9, #00d6e9);
+  filter: alpha(
+      opacity=100 finishopacity=50 style=1 startx=0,
+      starty=0,
+      finishx=0,
+      finishy=130
+    )
+    progid:DXImageTransform.Microsoft.gradient(
+      startcolorstr="#00A0E9",
+      endcolorstr="#00D6E9",
+      gradientType=0
+    );
+  -ms-filter: alpha(
+      opacity=100 finishopacity=50 style=1 startx=0,
+      starty=0,
+      finishx=0,
+      finishy=130
+    )
+    progid:DXImageTransform.Microsoft.gradient(
+      startcolorstr="#00A0E9",
+      endcolorstr="#00D6E9",
+      gradientType=0
+    );
 }
-.header p{
-	text-align: center;
+.header p {
+  text-align: center;
+  color: #171717;
+}
+.header .van-button--default {
+  color: #fff;
+  line-height: 34px;
+  height: 34px;
+  padding: 0 10px;
 }
 </style>

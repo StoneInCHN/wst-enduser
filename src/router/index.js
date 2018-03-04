@@ -4,12 +4,12 @@ import Router from 'vue-router'
 const Home = () => import('@/pages/Index')
 const BuyWater = () => import('@/pages/BuyWater')
 const Order = () => import('@/pages/Order')
-const AddressList = () => import('@/pages/address/AddressList')
+const ListAddress = () => import('@/pages/address/ListAddress')
 const AddAddress = () => import('@/pages/address/AddAddress')
 const EditAddress = () => import('@/pages/address/editAddress')
 const OrderSuccess = () => import('@/pages/OrderSuccess')
 const WaterTickets = () => import('@/pages/WaterTickets')
-
+const PersonalOrder = () => import('@/pages/personal/Order')
 
 Vue.use(Router)
 
@@ -31,9 +31,9 @@ export default new Router({
       component: Order
     },
     {
-      path: '/addressList',
-      name: 'AddressList',
-      component: AddressList
+      path: '/listAddress',
+      name: 'ListAddress',
+      component: ListAddress
     },
     {
       path: '/addAddress',
@@ -54,6 +54,11 @@ export default new Router({
       path: '/waterTickets',
       name: 'WaterTickets',
       component: WaterTickets
+    },
+    {
+      path: '/personalOrder',
+      name: 'PersonalOrder',
+      component: PersonalOrder
     }
   ]
 })

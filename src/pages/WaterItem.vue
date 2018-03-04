@@ -1,75 +1,105 @@
 <template>
 	<li class="goods-item">
-		<img src="../assset/images/water.svg" alt="桶装水">
+		<img src="../assets/images/water.svg" alt="桶装水">
 		<div class="title">
 			<p>{{goods.title}}</p>
 		</div>
 		<div class="warp">
-			<Stepper v-model="goods.count" :min="0" :default-value="0"/>
-			<span>￥{{totalPrice}}</span>
+			<Stepper :class="{hasValue: hasValue}" v-model="goods.count" :min="0" disable-input  :default-value="0" @plus="add"/>
+			<span>￥{{goods.price}}</span>
 		</div>
 	</li>
 </template>
 <script>
-import { numMul } from '../utils'
-import { Stepper } from 'vant'
+import { numMul } from "../utils";
+import { Stepper } from "vant";
 
-export default{
-	name: 'WaterItem',
-	components: {
-		Stepper
+export default {
+  name: "WaterItem",
+  components: {
+    Stepper
+  },
+  props: ["goods", "dropBall"],
+  computed: {
+    totalPrice() {
+      return numMul(this.goods.count, this.goods.price);
 	},
-	props: ["goods"],
-	computed: {
-		totalPrice(){
-			return numMul(this.goods.count, this.goods.price)
-		}
+	hasValue() {
+		return !(this.goods.count >0 )
 	}
-
-}
+  },
+  methods: {
+    add() {
+	  this.dropBall()
+    }
+  }
+};
 </script>
 
-<style >
-.goods-item{
-	position: relative;
-	height: 100px;
-	padding-left: 100px;
-}
-.goods-item img{
-	width: 100px;
-	height: 100px;
-	position: absolute;
-	left: 0;
-	top: 0;
-}
-.goods-item .title{
-	height: 70px;
-}
-.goods-item .title p{
-	font-size: 14px;
-	padding: 15px 0;
-}
-.goods-item .desc{
-	font-size: 12px;
-}
-
-.goods-item .warp span{
-	color: red;
-}
-.goods-item .warp .van-stepper{
-	float: right;
-	width: 68px;
-	margin-right: 10px;
-}
-.goods-item .warp .van-stepper__stepper{
-	width: 20px;
-	height: 20px;
-	background-color: #ececeb;
-	border-radius: 20px;
-}
-.goods-item .warp .van-stepper__input{
-	background-color: #fff;
-	border: none;
-	width: 26px;
+<style lang="less">
+.goods-item {
+  position: relative;
+  height: 74px;
+  padding: 0 0 0 74px;
+  margin-bottom: 10px;
+  img {
+    width: 74px;
+    height: 74px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #f3f3f3;
+  }
+  .title {
+    height: 44px;
+    padding-left: 10px;
+    p {
+      font-size: 14px;
+    }
+  }
+  .desc {
+    font-size: 12px;
+  }
+  .warp {
+    padding-left: 10px;
+    span {
+      color: #e64242;
+    }
+    .van-stepper {
+      float: right;
+      width: 68px;
+      margin-right: 10px;
+      .van-stepper__minus--disabled {
+        border-color: #fff;
+        background-color: #fff;
+      }
+    }
+    .van-stepper__stepper {
+      width: 20px;
+      height: 20px;
+      background-color: #00a0e9;
+      border-radius: 20px;
+    }
+    .van-stepper__stepper::after,
+    .van-stepper__stepper::before {
+      background-color: #fff;
+    }
+    .van-stepper__stepper::before {
+      height: 2px;
+    }
+    .van-stepper__stepper::after {
+      width: 2px;
+    }
+    .van-stepper__input {
+      background-color: #fff;
+      border: none;
+      width: 26px;
+	}
+	.hasValue {
+		.van-stepper__input{
+			color: #fff;
+		}
+	}
+  }
 }
 </style>

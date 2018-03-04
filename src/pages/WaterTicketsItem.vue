@@ -1,6 +1,6 @@
 <template>
    <div class="water-ticket-item">
-          <img src="../assset/images/water.svg" alt="桶装水">
+          <img src="../assets/images/water.svg" alt="桶装水">
           <p class="water-ticket-item-title">{{item.title}}</p>
           <span>{{item.count}}张</span>
           <p class="water-ticket-item-desc">当前可用订单0张</p>

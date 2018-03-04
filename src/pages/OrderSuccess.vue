@@ -9,24 +9,25 @@
 <script>
 export default {
   name: "OrderSuccess"
-}
+};
 </script>
-<style>
-.app-order-success{
-    text-align: center;
-    padding-top: 260px;
-}
-.app-order-success h4{
+<style lang="less">
+.app-order-success {
+  text-align: center;
+  padding-top: 160px;
+  background-color: #fff;
+  height: 100%;
+  box-sizing: border-box;
+  h4 {
     margin: 40px 0 20px 0;
-}
-.app-order-success span{
+  }
+  span {
     color: red;
-}
-
-.app-order-success p:last-child{
+  }
+  p:last-child {
     margin-top: 50px;
+  }
 }
-
 </style>
 
 
