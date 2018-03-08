@@ -4,19 +4,24 @@
 		<div class="water-conent">
 			<div class="sideBar">
 				<BadgeGroup  :active-key="activeKey">
-					<Badge title="乐百氏" @click="onClick" />
-					<Badge title="蓝剑" @click="onClick" />
-					<Badge title="蓝光" @click="onClick" />
-					<Badge title="农夫山泉" @click="onClick" />
-					<Badge title="恒大冰泉" @click="onClick" />
-					<Badge title="怡宝" @click="onClick" />
+					<Badge 
+            v-for="brand in brands"  
+            :key="brand.id" 
+            :title="brand.brandName" 
+            @click="clickBrand" 
+          />
 				</BadgeGroup>
 				<div class="profile">
 					<Button @click="personalOrder">我的</Button>
 				</div>
 			</div>
 			<ul class="goods">
-				<WaterItem v-for="(item, index) in items" :goods="item" :key="index" :dropBall="dropBall"/>		
+				<WaterItem 
+          v-for="(item) in items" 
+          :goods="item" 
+          :key="item.id" 
+          :dropBall="dropBall"
+        />		
 			</ul>
 		</div>
 		<ShoppingCart :cartItems="items" ref="shopCart"/>
@@ -43,41 +48,62 @@ export default {
     OrderPopup
   },
   mounted() {
-    console.log("mounted");
+    this.$apis.home
+      .getHpInfo({ userId: 1 })
+      .then(res => {
+        console.log("res", res);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    this.$apis.home
+      .getWGList({
+        entityId: 1,
+        qrCodeId: 1
+      })
+      .then(res => {
+        this.gList = res.msg.gList
+        this.items = this.gList[0].gInfo
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   data() {
     return {
       activeKey: 0,
-      items: [
-        {
-          title: "蓝剑矿泉水(15L)",
-          count: 1,
-          price: "12.00"
-        },
-        {
-          title: "蓝剑矿泉水(10L)",
-          count: 3,
-          price: "8.00"
-        },
-        {
-          title: "蓝剑矿泉水(20L)",
-          count: 0,
-          price: "15.00"
-        }
-      ]
+      gList: [],
+      items: [],
+      itemsBuy: []
     };
   },
+  computed: {
+    brands() {
+      let brands = [];
+      if (this.gList.length > 0) {
+        this.gList.forEach(item => {
+          const brand = {
+            id: item.brandId,
+            brandName: item.brandName
+          };
+          brands.push(brand);
+        });
+      }
+      return brands;
+    }
+  },
   methods: {
-    onClick(key) {
+    clickBrand(key) {
       this.activeKey = key;
+      this.items = this.gList[key].gInfo
     },
     dropBall(e) {
       e = e || window.event;
       this.$refs.shopCart.drop(e.target);
-	},
-	personalOrder(){
-		this.$router.push("personalOrder")
-	}
+    },
+    personalOrder() {
+      this.$router.push("personalOrder");
+    }
   }
 };
 </script>

@@ -7,6 +7,9 @@ const mutations = {
 	},
 	setEditAddress(state, {editAddress}){
 		state.editAddress = editAddress
+	},
+	setCartItems(state, {cartItems}){
+		state.cartItems = cartItems
 	}
 }
 

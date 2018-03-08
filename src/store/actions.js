@@ -7,6 +7,9 @@ const actions = {
 	},
 	setEditAddress({commit}, payload){
 		commit("setEditAddress", payload)
+	},
+	setCartItems({commit}, payload){
+		commit("setCartItems", payload)
 	}
 }
 

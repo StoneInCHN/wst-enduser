@@ -13,6 +13,10 @@ export default {
 <style>
 #app {
   height: 100%;
-  background-color: #DEE4E5;
+  background-color: #dee4e5;
+}
+button.van-dialog__confirm,
+button.van-dialog__confirm:active {
+  color: #00a0e9;
 }
 </style>

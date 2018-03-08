@@ -19,12 +19,12 @@
 			<div class="goods-details" v-show="showDetails" transiton="fade">
 				<div class="title">
 					<span>已选商品（{{totalCount}}）</span>
-					<span class="close" @click="toggleDetails">
+					<span class="close" @click="clearCart">
 						<Icon name="delete"/>清空购物车
 					</span>
 				</div>
 				<ul>
-					<cart-item v-for="(item, index) in cartItems" :item="item" :key="index"/>
+					<CartItem v-for="item in cartItems" :item="item" :key="item.id"/>
 				</ul>
 			</div>
 		</transition>
@@ -44,7 +44,7 @@
 	</div>
 </template>
 <script>
-import { Button, Row, Col, Icon } from "vant";
+import { Button, Row, Col, Icon, Dialog } from "vant";
 import CartItem from "./CartItem";
 import { numAdd, numMul } from "../utils";
 
@@ -54,10 +54,9 @@ export default {
     Button,
     Row,
     vanCol: Col,
-	CartItem,
-	Icon
+    CartItem,
+    Icon
   },
-  props: ["cartItems"],
   data() {
     return {
 	  showDetails: false,
@@ -84,11 +83,14 @@ export default {
     },
     totalPrice() {
       let price = 0;
-      this.cartItems.map(item => {
-        let total = numMul(item.price, item.count);
+      this.cartItems.forEach(item => {
+        let total = numMul(item.originPrice, item.count);
         price = numAdd(price, total);
       });
       return price;
+    },
+    cartItems(){
+      return this.$store.state.cartItems
     }
   },
   methods: {
@@ -98,6 +100,16 @@ export default {
     },
     toggleDetails() {
       this.showDetails = !this.showDetails;
+    },
+    clearCart(){
+      Dialog.confirm({
+        title: '清空购物车',
+        message: '确认要清空购物车吗?'
+      }).then(() => {
+        this.$store.dispatch('setCartItems',{cartItems: []})
+      }).catch(()=>{
+
+      })
     },
     drop(el) {
       //触发一次事件就会将所有小球进行遍历
@@ -199,6 +211,7 @@ export default {
         height: 20px;
         width: 20px;
         text-align: center;
+        font-size: 12px;
       }
     }
     .cart-price {

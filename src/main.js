@@ -3,20 +3,19 @@ import App from './App'
 import router from './router'
 import store from './store'
 import FastClick from 'fastclick'
-import api from './apis'
+import apis from './apis/index'
+
+require("./mock")
 
 import './reset.css'
 
+Vue.prototype.$apis = apis
 
-Vue.prototype.$api = api
 FastClick.attach(document.body)
 Vue.config.productionTip = false
 
-
 new Vue({
-  el: '#app',
-  store,
   router,
-  components: { App },
-  template: '<App/>'
-})
+  store,
+  render: h => h(App)
+}).$mount('#app')

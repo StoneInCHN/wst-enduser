@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Home = () => import('@/pages/Index')
-const BuyWater = () => import('@/pages/BuyWater')
+const Home = () => import('@/pages/Home')
 const Order = () => import('@/pages/Order')
 const ListAddress = () => import('@/pages/address/ListAddress')
 const AddAddress = () => import('@/pages/address/AddAddress')
@@ -19,11 +18,6 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
-    },
-    {
-      path: '/buyWater',
-      name: 'BuyWater',
-      component: BuyWater
     },
     {
       path: '/order',

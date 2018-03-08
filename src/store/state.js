@@ -3,7 +3,8 @@ const state = {
   count: 0,
   name: "tanbiao",
   resultNum: 0,
-  editAddress: {}
+  editAddress: {},
+  cartItems: []
 };
 
 export default state;

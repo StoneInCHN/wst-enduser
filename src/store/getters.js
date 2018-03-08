@@ -10,6 +10,9 @@ const getters = {
 	},
 	getEditAddress: state => {
 		return state.editAddress
+	},
+	cartItems: state =>{
+		return state.cartItems
 	}
 }
 

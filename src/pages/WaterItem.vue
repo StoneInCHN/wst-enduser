@@ -1,16 +1,25 @@
 <template>
 	<li class="goods-item">
-		<img src="../assets/images/water.svg" alt="桶装水">
+		<img :src="goods.picUrl" :alt="this.fullName">
 		<div class="title">
-			<p>{{goods.title}}</p>
+			<p>{{this.fullName}}</p>
 		</div>
 		<div class="warp">
-			<Stepper :class="{hasValue: hasValue}" v-model="goods.count" :min="0" disable-input  :default-value="0" @plus="add"/>
-			<span>￥{{goods.price}}</span>
+			<Stepper 
+        :class="{hasValue: hasValue}" 
+        v-model="count" 
+        :min="0" 
+        disable-input  
+        :default-value="0" 
+        @plus="add"
+        @minus="minus"
+      />
+			<span>￥{{goods.originPrice}}</span>
 		</div>
 	</li>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
 import { numMul } from "../utils";
 import { Stepper } from "vant";
 
@@ -21,16 +30,75 @@ export default {
   },
   props: ["goods", "dropBall"],
   computed: {
-    totalPrice() {
-      return numMul(this.goods.count, this.goods.price);
-	},
-	hasValue() {
-		return !(this.goods.count >0 )
-	}
+    ...mapGetters([
+      "cartItems"
+    ]),
+    hasValue() {
+      return !(this.count > 0);
+    },
+    fullName(){
+      return `${this.goods.gName} (${this.goods.gSpec})`
+    },
+    count: {
+      get() {
+        let count = 0;
+        if (this.cartItems && this.cartItems.length > 0) {
+          this.cartItems.forEach(item => {
+            if (this.goods.id === item.id) {
+              count = item.count;
+            }
+          });
+        }
+        return count;
+      },
+      set() {}
+    }
   },
   methods: {
+    ...mapActions(["setCartItems"]),
     add() {
-	  this.dropBall()
+      this.dropBall();
+      this.findItems("add");
+    },
+    minus() {
+      this.findItems("minus");
+    },
+    findItems(type) {
+      // type add加 minus 减
+      const cartItems = this.cartItems;
+      let flag = false;
+      let resultItems = [];
+      if (cartItems && cartItems.length > 0) {
+        cartItems.forEach(item => {
+          if (item.id === this.goods.id) {
+            if ("add" === type) {
+              ++item.count;
+              flag = true;
+              resultItems.push(item);
+            } else if ("minus" === type) {
+              --item.count;
+              if (item.count > 0) {
+                resultItems.push(item);
+              }
+            }
+          } else {
+            resultItems.push(item);
+          }
+        });
+      }
+
+      //store中的cartItems中没有当前选择的商品
+      if (!flag && "add" === type) {
+        const item = {
+          id: this.goods.id,
+          gName: this.goods.gName,
+          originPrice: this.goods.originPrice,
+          gSpec: this.goods.gSpec,
+          count: 1
+        };
+        resultItems.push(item);
+      }
+      this.setCartItems({ cartItems: resultItems });
     }
   }
 };
@@ -94,12 +162,12 @@ export default {
       background-color: #fff;
       border: none;
       width: 26px;
-	}
-	.hasValue {
-		.van-stepper__input{
-			color: #fff;
-		}
-	}
+    }
+    .hasValue {
+      .van-stepper__input {
+        color: #fff;
+      }
+    }
   }
 }
 </style>
