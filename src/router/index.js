@@ -8,7 +8,7 @@ const AddAddress = () => import('@/pages/address/AddAddress')
 const EditAddress = () => import('@/pages/address/editAddress')
 const OrderSuccess = () => import('@/pages/OrderSuccess')
 const WaterTickets = () => import('@/pages/WaterTickets')
-const PersonalOrder = () => import('@/pages/personal/Order')
+const PersonalOrder = () => import('@/pages/mine/Order')
 
 Vue.use(Router)
 

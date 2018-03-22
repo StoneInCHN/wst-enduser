@@ -1,8 +1,8 @@
 <template>
 	<li class="goods-item">
-		<img :src="goods.picUrl" :alt="this.fullName">
+		<img :src="goods.picUrl" :alt="fullName">
 		<div class="title">
-			<p>{{this.fullName}}</p>
+			<p>{{fullName}}</p>
 		</div>
 		<div class="warp">
 			<Stepper 
@@ -91,8 +91,10 @@ export default {
       if (!flag && "add" === type) {
         const item = {
           id: this.goods.id,
+          picUrl: this.goods.picUrl,
           gName: this.goods.gName,
           originPrice: this.goods.originPrice,
+          distPrice: this.goods.distPrice,
           gSpec: this.goods.gSpec,
           count: 1
         };

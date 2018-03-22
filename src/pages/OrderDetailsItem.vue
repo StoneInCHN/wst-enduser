@@ -1,22 +1,34 @@
 <template>
 	<li class="order-details-list-item">
-		<img src="../assets/images/water.svg" alt="桶装水">
+		<img :src="item.picUrl" :alt="fullName">
 		<p>
-			{{item.title}}
+			{{fullName}} <span> X {{item.count}}</span>
 		</p>
 		<div class="price">
-			<span>￥12.00</span>
-			<span>￥13.00</span>
+			<span>￥{{totalOriginPrice}}</span>
+			<span>￥{{totalDistPrice}}</span>
 		</div>
 	</li>
 </template>
 <script>
+import {numMul} from "../utils"
 export default {
   name: "OrderDetailsItem",
   props: {
     item: {
       type: Object,
       required: true
+    }
+  },
+  computed:{
+    fullName(){
+      return `${this.item.gName} (${this.item.gSpec})`
+    },
+    totalOriginPrice() {
+      return numMul(this.item.originPrice, this.item.count);
+    },
+    totalDistPrice() {
+      return numMul(this.item.distPrice, this.item.count);
     }
   }
 };

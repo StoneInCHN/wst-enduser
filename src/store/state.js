@@ -4,7 +4,11 @@ const state = {
   name: "tanbiao",
   resultNum: 0,
   editAddress: {},
-  cartItems: []
+  userId: 32,
+  qrCodeId: "10000",
+  cartItems: [],
+  defaultAddress: {},
+  addressLists: []
 };
 
 export default state;

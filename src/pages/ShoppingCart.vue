@@ -44,6 +44,7 @@
 	</div>
 </template>
 <script>
+import { mapActions } from "vuex";
 import { Button, Row, Col, Icon, Dialog } from "vant";
 import CartItem from "./CartItem";
 import { numAdd, numMul } from "../utils";
@@ -59,8 +60,8 @@ export default {
   },
   data() {
     return {
-	  showDetails: false,
-	  balls: [
+      showDetails: false,
+      balls: [
         { show: false },
         { show: false },
         { show: false },
@@ -89,27 +90,44 @@ export default {
       });
       return price;
     },
-    cartItems(){
-      return this.$store.state.cartItems
+    cartItems() {
+      return this.$store.state.cartItems;
     }
   },
   methods: {
+    ...mapActions([
+      "setDefaultAddress"
+    ]),
     buy() {
       console.log(this.items);
-      this.$router.push("/order");
+      const params = {
+        gIds: { "1": 2, "2": 1 },
+        qrCodeId: 1
+      };
+      this.$apis.order
+        .getPreInfo(params)
+        .then(res => {
+          console.log("res", res);
+          console.log("addrInfo", res.msg.addrInfo);
+          this.setDefaultAddress(res.msg.addrInfo)
+          this.$router.push("/order");
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     toggleDetails() {
       this.showDetails = !this.showDetails;
     },
-    clearCart(){
+    clearCart() {
       Dialog.confirm({
-        title: '清空购物车',
-        message: '确认要清空购物车吗?'
-      }).then(() => {
-        this.$store.dispatch('setCartItems',{cartItems: []})
-      }).catch(()=>{
-
+        title: "清空购物车",
+        message: "确认要清空购物车吗?"
       })
+        .then(() => {
+          this.$store.dispatch("setCartItems", { cartItems: [] });
+        })
+        .catch(() => {});
     },
     drop(el) {
       //触发一次事件就会将所有小球进行遍历
@@ -238,15 +256,15 @@ export default {
     width: 100%;
     background-color: #f4f7fd;
     .title {
-	  padding: 10px;
-	  font-size: 13px;
+      padding: 10px;
+      font-size: 13px;
       .close {
         float: right;
-		margin-right: 10px;
-		font-size: 13px;
-		.van-icon{
-			margin-right: 3px;
-		}
+        margin-right: 10px;
+        font-size: 13px;
+        .van-icon {
+          margin-right: 3px;
+        }
       }
     }
   }
@@ -277,7 +295,3 @@ export default {
   opacity: 0;
 }
 </style>
-
-
-
-

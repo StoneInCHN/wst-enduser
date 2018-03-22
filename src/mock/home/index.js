@@ -53,13 +53,13 @@ const getWGList = {
           {
             gSpec: "10L",
             wtPurAmount: 200, //水票单位数量金额
-            distPrice: 15, //水优惠价,即实际售价
+            distPrice: 13, //水优惠价,即实际售价
             picUrl: imgUrl,
             gName: "冰川时代",
             wtPurCount: 10, //购买水票单位数量
             brandId: 1,
             id: 1,
-            originPrice: 10, //水原价
+            originPrice: 16, //水原价
             wtGiftCount: 1 //购买水票后赠送数量
           },
           {
@@ -71,19 +71,19 @@ const getWGList = {
             wtPurCount: 10, //购买水票单位数量
             brandId: 1,
             id: 2,
-            originPrice: 13, //水原价
+            originPrice: 18, //水原价
             wtGiftCount: 1 //购买水票后赠送数量
           },
           {
             gSpec: "20L",
             wtPurAmount: 400, //水票单位数量金额
-            distPrice: 15, //水优惠价,即实际售价
+            distPrice: 16, //水优惠价,即实际售价
             picUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=357772990,2120764766&fm=27&gp=0.jpg",
             gName: "冰川时代",
             wtPurCount: 10, //购买水票单位数量
             brandId: 1,
             id: 3,
-            originPrice: 15, //水原价
+            originPrice: 20, //水原价
             wtGiftCount: 1 //购买水票后赠送数量
           }
         ]

@@ -1,12 +1,12 @@
 <template>
 	<div class="order">
     <div class="order-header">
-      <Button v-if="hasDefaultAddress" class="add-address-btn" size="small" @click="addAddress">+新增收货地址</Button>
-      <div class="order-address" v-if="!hasDefaultAddress">
-        <h6>中德英伦联邦 16号楼1001室</h6>
+      <Button v-if="!hasDefaultAddress" class="add-address-btn" size="small" @click="addAddress">+新增收货地址</Button>
+      <div class="order-address" v-if="hasDefaultAddress">
+        <h6>{{ `${defaultAddress.addr} ${defaultAddress.doorNum}`}}</h6>
 				<p>
-					<span>王先生</span>
-					<span>123456789</span>
+					<span>{{defaultAddress.contactName}}</span>
+					<span>{{defaultAddress.contactPhone}}</span>
 				</p>
 				<Icon name="arrow" @click="selectAddress"/>
       </div>
@@ -15,27 +15,17 @@
       <section>
         <h6>商品信息</h6>
         <ul>
-          <order-item v-for="(item, index) in items" :item="item" :key="index"/>
+          <OrderItem v-for="item in cartItems" :item="item" :key="item.id"/>
         </ul>
         <div class="total-tips">
-          共<span>{{count}}</span>件商品，合计: <span>￥12.00</span>
+          共<span>{{count}}</span>件商品，合计: <span>{{totalPrice}}</span>
         </div>
       </section>
 			<section>
         <h6>订单信息</h6>
 			<CellGroup>
-			  	<Cell title="订单金额" value="￥12.00" />
-          <!--
-			 	<Cell title="优惠金额" value="￥10.00" >
-			 		<p solt class="sales-price">
-						<Tag type="danger">大客户优惠</Tag>
-						<span>
-							￥10.00
-						</span>
-			 		</p>
-			 	</Cell>
-         -->
-			 	<Cell title="需要付款" value="￥10.00" />
+			  	<Cell title="订单金额" :value="totalPrice" />
+			 	<Cell title="需要付款" :value="totalPrice" />
 			</CellGroup>
       </section>
 			<section>
@@ -56,6 +46,8 @@
 	</div>
 </template>
 <script>
+import { numAdd, numMul } from "../utils";
+import { mapActions, mapGetters } from "vuex";
 import {
   Button,
   Row,
@@ -80,19 +72,13 @@ export default {
     Actionsheet,
     OrderItem
   },
+  mounted(){
+    console.log("mounted ", this.cartItems)
+  },
   data() {
     return {
       showPayMethod: false,
-      hasDefaultAddress: true,
       payMethodName: "微信付款",
-      items: [
-        {
-          title: "蓝剑矿泉水（15L）X 1"
-        },
-        {
-          title: "蓝剑矿泉水（20L）X 1"
-        }
-      ],
       actions: [
         {
           key: 1,
@@ -112,18 +98,48 @@ export default {
       ]
     };
   },
+  mounted(){
+    console.log("defaultAddress", this.defaultAddress)
+  },
   computed: {
-    count() {
-      return 5;
-    }
+    ...mapGetters([
+      "cartItems",
+      "defaultAddress"
+    ]),
+    hasDefaultAddress(){
+      return !!this.defaultAddress
+    },
+    count: {
+      get() {
+        console.log("count ", this.cartItems)
+        let count = 0;
+        if (this.cartItems && this.cartItems.length > 0) {
+          this.cartItems.forEach(item => {
+              count = item.count;
+          });
+        }
+        return count;
+      },
+      set() {}
+    },
+    totalPrice() {
+      let price = 0;
+      this.cartItems.forEach(item => {
+        let total = numMul(item.originPrice, item.count);
+        price = numAdd(price, total);
+      });
+      return `￥${price}`;
+    },
   },
   methods: {
+    ...mapActions([
+      "setCartItems"
+    ]),
     addAddress() {
       console.log("addAddress");
       this.$router.push("/listAddress");
     },
     changePayMethod() {
-      console.log("addAddress");
       this.showPayMethod = !this.showPayMethod;
     },
     onClick(item) {

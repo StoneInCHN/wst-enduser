@@ -2,19 +2,20 @@
   <div class="App-edit-address">
     <div class="title">联系人</div>
     <CellGroup>
-      <Field v-model="user.name" label="用户名" placeholder="请填写收货人姓名" />
-      <Field v-model="user.tel" label="电话" placeholder="请填写收货手机号码" />
+      <Field v-model="user.contactName" label="用户名" placeholder="请填写收货人姓名" />
+      <Field v-model="user.contactPhone" label="电话" placeholder="请填写收货手机号码" />
     </CellGroup>
     <div class="title">收货地址</div>
     <CellGroup>
-      <Field v-model="user.address" type="textarea" label="小区/大厦/学校" placeholder="例：中德英伦联邦" />
-      <Field v-model="user.houseNum" label="楼号-门牌号" placeholder="例：16号楼1001室" />
+      <Field v-model="user.addr" type="textarea" label="小区/大厦/学校" placeholder="例：中德英伦联邦" />
+      <Field v-model="user.doorNum" label="楼号-门牌号" placeholder="例：16号楼1001室" />
     </CellGroup>
     <Button class="save" size="large" @click="save">保存</Button>
   </div>
 </template>
 <script>
 import { Field, CellGroup, Button } from "vant";
+import { mapGetters } from "vuex";
 
 export default {
   name: "editAddress",
@@ -23,16 +24,29 @@ export default {
     CellGroup,
     Button
   },
+  mounted() {
+    console.log("params", this.$route.query);
+  },
   computed: {
+    ...mapGetters(["addressLists", "qrCodeId", "userId"]),
     user() {
-      console.log(this.$store.getters.getEditAddress);
-      return this.$store.getters.getEditAddress;
+      let item = {};
+      const { addressLists } = this;
+      const id = this.$route.query.id || "-1";
+      if (addressLists && addressLists.length > 0) {
+        addressLists.forEach(address => {
+          if (id === address.id) {
+            item = address;
+          }
+        });
+      }
+      return item;
     }
   },
   methods: {
     save() {
       console.log(this.user);
-      this.$router.push("addressList");
+      this.$router.push("listAddress");
     }
   }
 };
@@ -50,8 +64,8 @@ export default {
     font-size: 12px;
   }
   .save {
-    background-color: #00A0E9;
-    color:#fff;
+    background-color: #00a0e9;
+    color: #fff;
     margin-top: 5px;
   }
 }
