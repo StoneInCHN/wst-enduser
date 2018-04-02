@@ -25,12 +25,19 @@
 			</ul>
 		</div>
 		<ShoppingCart :cartItems="items" ref="shopCart"/>
-		<OrderPopup ref="orderPopup2"/>
+		<OrderPopup ref="orderPopup"/>
+    <Dialog v-show="showQRCodeBinding" @confirm="onConfirm">
+      <Field
+        v-model="qrCodeId"
+        label="用户编号"
+        placeholder="请输入用户编号"
+      />
+    </Dialog>
 	</div>
 </template>
 <script>
 import vue from "vue";
-import { BadgeGroup, Badge, Button } from "vant";
+import { BadgeGroup, Badge, Button, Dialog, Field } from "vant";
 import WaterItem from "./WaterItem";
 import ShoppingCart from "./ShoppingCart";
 import Header from "../components/Header";
@@ -45,7 +52,9 @@ export default {
     Button,
     WaterItem,
     ShoppingCart,
-    OrderPopup
+    OrderPopup,
+    Dialog,
+    Field
   },
   mounted() {
     this.$apis.home
@@ -53,8 +62,22 @@ export default {
       .then(res => {
         console.log("res", res);
       })
-      .catch(error => {
-        console.log(error);
+      .catch(e => {
+        console.log(e);
+      });
+    this.$apis.common
+      .auth({ qrCodeId: 1 })
+      .then(res => {
+        console.log("res.common.auth", res);
+        console.log(res.code)
+        if (res.code === "1001") {
+          console.log("-----", this.showQRCodeBinding)
+          this.showQRCodeBinding = true
+          this.$refs.orderPopup.showNotice()
+        }
+      })
+      .catch(e => {
+        console.log(e);
       });
     this.$apis.home
       .getWGList({
@@ -62,11 +85,11 @@ export default {
         qrCodeId: 1
       })
       .then(res => {
-        this.gList = res.msg.gList
-        this.items = this.gList[0].gInfo
+        this.gList = res.msg.gList;
+        this.items = this.gList[0].gInfo;
       })
-      .catch(error => {
-        console.log(error);
+      .catch(e => {
+        console.log(e);
       });
   },
   data() {
@@ -74,7 +97,9 @@ export default {
       activeKey: 0,
       gList: [],
       items: [],
-      itemsBuy: []
+      itemsBuy: [],
+      showQRCodeBinding: false,
+      qrCodeId: ''
     };
   },
   computed: {
@@ -95,7 +120,7 @@ export default {
   methods: {
     clickBrand(key) {
       this.activeKey = key;
-      this.items = this.gList[key].gInfo
+      this.items = this.gList[key].gInfo;
     },
     dropBall(e) {
       e = e || window.event;
@@ -103,6 +128,12 @@ export default {
     },
     personalOrder() {
       this.$router.push("personalOrder");
+    },
+    showNotice() {
+			this.$refs.orderPopup.showNotice()
+		},
+    onConfirm(){
+      console.log("绑定二维码")
     }
   }
 };

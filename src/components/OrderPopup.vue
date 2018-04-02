@@ -1,5 +1,5 @@
 <template>
-    <Popup v-model="show" class="popup-order">
+    <Popup v-model="show" class="popup-order" :style="popupOrderStyle" >
 		<div class="popup-header">
 			<Icon name="close" @click="close"/>
             <div class="close-line"></div>
@@ -17,7 +17,27 @@
 				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
                 <Button class="cancel" type="default" size="large" @click="notice">取消订单</Button>
 			</div>
-            <div class="order-item">
+      <div class="order-item">
+				<p class="date">您在2018.1.14 22：45:20下单</p>
+				<p >星雅俊园 19栋1001室</p>
+				<p class="price-info">
+                    <span class="name">蓝剑矿泉水（15L）X 1</span>
+                    <span class="price">￥12.00</span>
+                </p>
+				<p class="status">快递员正在路上，请稍后</p>
+				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
+			</div>
+      <div class="order-item">
+				<p class="date">您在2018.1.14 22：45:20下单</p>
+				<p >星雅俊园 19栋1001室</p>
+				<p class="price-info">
+                    <span class="name">蓝剑矿泉水（15L）X 1</span>
+                    <span class="price">￥12.00</span>
+                </p>
+				<p class="status">快递员正在路上，请稍后</p>
+				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
+			</div>
+      <div class="order-item">
 				<p class="date">您在2018.1.14 22：45:20下单</p>
 				<p >星雅俊园 19栋1001室</p>
 				<p class="price-info">
@@ -41,7 +61,10 @@ export default {
   },
   data() {
     return {
-      show: false
+      show: false,
+      popupOrderStyle: {
+        maxHeight: `${window.innerHeight * 0.8}`
+      }
     };
   },
   methods: {
@@ -60,8 +83,8 @@ export default {
 </script>
 <style lang="less">
 .popup-order {
-  position: relative;
-  width: 85%;
+  position: fixed;
+  width: 90%;
   border-radius: 5px;
   .popup-header {
     text-align: center;
@@ -102,8 +125,8 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        .name{
-            flex: 1;
+        .name {
+          flex: 1;
         }
         .price {
           color: red;
@@ -111,21 +134,21 @@ export default {
           text-align: center;
         }
       }
-      .status{
-          font-size: 12px;
+      .status {
+        font-size: 12px;
       }
-      .van-button{
-          height: 30px;
-          line-height: 30px;
-          background-color: #00A0E9;
-          border-color: #00A0E9;
-          color: #fff;
-          font-size: 14px;
+      .van-button {
+        height: 30px;
+        line-height: 30px;
+        background-color: #00a0e9;
+        border-color: #00a0e9;
+        color: #fff;
+        font-size: 14px;
       }
-      .cancel{
-          background-color: #fff;
-          color:#00A0E9;
-          margin-top: 10px;
+      .cancel {
+        background-color: #fff;
+        color: #00a0e9;
+        margin-top: 10px;
       }
     }
   }

@@ -117,3 +117,8 @@ export function put(url, params = {}) {
     );
   });
 }
+
+
+export function lift(fn){
+  
+}
