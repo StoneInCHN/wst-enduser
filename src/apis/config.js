@@ -9,31 +9,31 @@ axios.defaults.timeout = 5000;
 //
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
 
+axios.defaults.baseURL = "http://localhost:8080/wst-customer/";
+
 // http请求拦截器
 axios.interceptors.request.use(
   config => {
-    if (store.state.token) {
-      config.headers.post["X-Auth-Token"] = `${store.state.token}`;
+    const { token } = store.state;
+    console.log({ store });
+    if (token) {
+      config.headers.post["X-Auth-Token"] = `${token}`;
     }
     return config;
   },
   error => {
-    Toast(error);
+    Toast.fail("错误的传参");
     return Promise.reject(error);
   }
 );
-// http响应拦截器
+
+//返回状态判断
 axios.interceptors.response.use(
-  response => {
-    console.log("response", response)
-    if(response.status === 200){
-      return response.data;
-    }else{
-      Toast.fail('请求连接异常，请稍后重试')
-    }
+  res => {
+    return Promise.resolve(res.data);
   },
   error => {
-    Toast(error);
+    Toast.fail("网络异常");
     return Promise.reject(error);
   }
 );
@@ -118,7 +118,17 @@ export function put(url, params = {}) {
   });
 }
 
-
-export function lift(fn){
-  
+export function lift(res) {
+  console.log({ res });
+  return new Promise((resolve, reject) => {
+    res.then(r => {
+      const _CODE = "0000";
+      if (r.code === _CODE) {
+        resolve(r.msg);
+      } else {
+        Toast.fail(r.desc);
+        reject(r);
+      }
+    });
+  });
 }

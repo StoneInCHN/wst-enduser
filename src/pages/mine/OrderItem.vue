@@ -5,7 +5,7 @@
             <span class="status">{{getStatic(item.oStatus)}}</span>
         </div> 
         <section class="item-info" v-for="subItem in item.orderItems" :key="subItem.id">
-            <img src="../../assets/images/water.svg" :alt="subItem.gName">
+            <div class="item-img" :style="imgStyle"/>
             <p>{{subItem.gName}}</p>
             <p class="price-info">
                 <span>X{{subItem.count}}</span>
@@ -48,7 +48,16 @@ export default {
     console.log("item", this.item);
   },
   computed: {
-    ...mapGetters(["qrCodeId"])
+    ...mapGetters(["qrCodeId"]),
+    imgStyle(){
+      let style = {}
+      if(this.item.picUrl){
+        style ={
+          backgroundImage: `url(${this.item.picUrl})`
+        }
+      }
+      return style;
+    }
   },
   methods: {
     getStatic(key) {
@@ -100,13 +109,14 @@ export default {
   .item-info {
     position: relative;
     padding: 8px 25px 8px 83px;
-    img {
+    .item-img {
       position: absolute;
       left: 25px;
       top: 8px;
       width: 45px;
       height: 45px;
-      background-color: #ccc;
+      background: #f3f3f3 url("../../assets/images/water.svg") no-repeat center ;
+      background-size: cover;
     }
     p {
       color: #191919;

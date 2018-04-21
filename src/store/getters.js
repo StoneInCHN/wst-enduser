@@ -1,31 +1,18 @@
 const getters = {
-	getCount: state => {
-		return state.count 
-	},
-	getName: state => {
-		return state.name
-	},
-	getResultNum: state => {
-		return state.resultNum
-	},
-	getEditAddress: state => {
-		return state.editAddress
-	},
-	addressLists: state =>{
-		return state.addressLists
-	},
-	cartItems: state =>{
-		return state.cartItems
-	},
-	defaultAddress: state =>{
-		return state.defaultAddress
-	},
-	qrCodeId: state =>{
-		return state.qrCodeId
-	},
-	userId: state=>{
-		return state.userId
-	}
-}
+  token: state => state.token,
+  key: state => state.key,
+  userId: state => state.userId,
+  count: state => state.count,
+  name: state => state.name,
+  resultNum: state => state.resultNum,
+  editAddress: state => state.editAddress,
+  addressLists: state => state.addressLists,
+  cartItems: state => state.cartItems,
+  defaultAddress: state => state.defaultAddress,
+  qrCodeId: state => state.qrCodeId,
+  orderNotice: state => state.orderNotice,
+  noticeOrders: state => state.noticeOrders,
+  commonPopup: state => state.commonPopup
+};
 
 export default getters;

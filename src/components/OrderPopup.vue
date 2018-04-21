@@ -1,82 +1,83 @@
 <template>
-    <Popup v-model="show" class="popup-order" :style="popupOrderStyle" >
+    <Popup v-model="show" class="popup-order">
 		<div class="popup-header">
 			<Icon name="close" @click="close"/>
-            <div class="close-line"></div>
-            <h6>您目前有2个订单正在处理中</h6>
+      <div class="close-line"/>
+      <h6>{{`您目前有${orderNum}个订单正在处理中`}}</h6>
 		</div>
 		<div class="popup-content">
-			<div class="order-item">
-				<p class="date">您在2018.1.14 22：45:20下单</p>
-				<p >星雅俊园 19栋1001室</p>
-				<p class="price-info">
-                    <span class="name">蓝剑矿泉水（15L）X 1</span>
-                    <span class="price">￥12.00</span>
-                </p>
-				<p class="status">快递员正在路上，请稍后</p>
+			<div class="order-item" v-for="order in noticeOrders" :key="order.id">
+				<p class="date">您在{{order.createDate|formatDate}}下单</p>
+				<p >{{order.addrDetail}}</p>
+				<p class="price-info" v-for="(item, index) in order.item" :key="index">
+            <span class="name">{{`${item.gName} X ${item.count}`}}</span>
+            <span class="price">{{`￥${item.amount}`}}</span>
+        </p>
+				<p v-if="order.oStatus === 'PENDING'" class="status">快递员正在路上，请稍后</p>
 				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
-                <Button class="cancel" type="default" size="large" @click="notice">取消订单</Button>
-			</div>
-      <div class="order-item">
-				<p class="date">您在2018.1.14 22：45:20下单</p>
-				<p >星雅俊园 19栋1001室</p>
-				<p class="price-info">
-                    <span class="name">蓝剑矿泉水（15L）X 1</span>
-                    <span class="price">￥12.00</span>
-                </p>
-				<p class="status">快递员正在路上，请稍后</p>
-				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
-			</div>
-      <div class="order-item">
-				<p class="date">您在2018.1.14 22：45:20下单</p>
-				<p >星雅俊园 19栋1001室</p>
-				<p class="price-info">
-                    <span class="name">蓝剑矿泉水（15L）X 1</span>
-                    <span class="price">￥12.00</span>
-                </p>
-				<p class="status">快递员正在路上，请稍后</p>
-				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
-			</div>
-      <div class="order-item">
-				<p class="date">您在2018.1.14 22：45:20下单</p>
-				<p >星雅俊园 19栋1001室</p>
-				<p class="price-info">
-                    <span class="name">蓝剑矿泉水（15L）X 1</span>
-                    <span class="price">￥12.00</span>
-                </p>
-				<p class="status">快递员正在路上，请稍后</p>
-				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
+        <Button class="cancel" type="default" size="large" @click="cancelOrder">取消订单</Button>
 			</div>
 		</div>
 	</Popup>
 </template>
 <script>
-import { Button, Icon, Popup } from "vant";
+import { Button, Icon, Popup, Dialog, Toast } from "vant";
+import { mapActions, mapGetters } from "vuex";
+import { formatDate } from "@/utils";
 export default {
   name: "OrderPopup",
   components: {
     Popup,
     Icon,
-    Button
+    Button,
+    Dialog,
+    Toast
   },
   data() {
     return {
-      show: false,
-      popupOrderStyle: {
-        maxHeight: `${window.innerHeight * 0.8}`
-      }
+      show: false
     };
   },
+  created() {
+    this.show = this.orderNotice;
+    console.log(this.noticeOrders);
+  },
+  computed: {
+    ...mapGetters(["orderNotice", "noticeOrders"]),
+    orderNum() {
+      return this.noticeOrders.length || 0;
+    }
+  },
   methods: {
+    ...mapActions(["setOrderNotice", "setNoticeOrders"]),
     showNotice() {
-      console.log("showNotice");
-      this.show = !this.show;
+      this.show = true;
+      this.setOrderNotice(true);
     },
     close() {
-      this.show = !this.show;
+      this.show = false;
+      this.setOrderNotice(false);
     },
     notice() {
-      alert("渴死了，送到哪儿了...");
+      Toast("渴死了，送到哪儿了...")
+    },
+    cancelOrder() {
+      Dialog.confirm({
+        title: "取消订单",
+        message: "确定要取消订单吗?"
+      })
+        .then(() => {
+          Toast("取消成功")
+        })
+        .catch(() => {
+          // on cancel
+        });
+    }
+  },
+  filters: {
+    formatDate(time) {
+      var date = new Date(time);
+      return formatDate(date, "yyyy-MM-dd hh:mm");
     }
   }
 };
@@ -84,7 +85,8 @@ export default {
 <style lang="less">
 .popup-order {
   position: fixed;
-  width: 90%;
+  width: 80vw;
+  max-height: 80vh;
   border-radius: 5px;
   .popup-header {
     text-align: center;
@@ -110,6 +112,8 @@ export default {
     }
   }
   .popup-content {
+    max-height: calc(~"80vh - 61px");
+    overflow: auto;
     .order-item {
       padding: 0 20px 20px;
       p {
@@ -125,6 +129,8 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        font-size: 13px;
+        color: #7c7c7c;
         .name {
           flex: 1;
         }

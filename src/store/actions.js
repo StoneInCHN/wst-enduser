@@ -1,3 +1,5 @@
+import * as types from "./types";
+
 const actions = {
   increment({ commit }) {
     commit("increment");
@@ -14,14 +16,26 @@ const actions = {
   setDefaultAddress({ commit }, payload) {
     commit("setDefaultAddress", { defaultAddress: payload });
   },
-  setQrCodeId({commit}, payload){
-	commit("setQrCodeId", { qrCodeId: payload });
+  setAddressLists({ commit }, payload) {
+    commit("setAddressLists", { addressLists: payload });
   },
-  setUserId({commit}, payload){
-	commit("setUserId", { userId: payload });
+  setToken({ commit }, token) {
+    commit(types.COM_SET_TOKEN, token);
   },
-  setAddressLists({commit}, payload){
-	commit("setAddressLists", { addressLists: payload });
+  setQrCodeId({ commit }, qrCodeId) {
+    commit(types.COM_SET_QRCODE_ID, qrCodeId);
+  },
+  setUserId({ commit }, userId) {
+    commit(types.COM_SET_USER_ID, userId);
+  },
+  setOrderNotice({ commit }, orderNotice) {
+    commit(types.COM_SET_ORDER_NOTICE, orderNotice);
+  },
+  setNoticeOrders({ commit }, noticeOrders) {
+    commit(types.NOTICE_SET_ORDER, noticeOrders);
+  },
+  setCommonPopup({ commit }, commonPopup) {
+    commit(types.COM_SET_COMMON_POPUP, commonPopup);
   }
 };
 

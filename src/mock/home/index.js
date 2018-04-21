@@ -36,7 +36,7 @@ const hpInfo = {
       gCount: 1,
       gPic: "url"
     },
-    flag: 2, //判断用户是否有过购买行为
+    flag: 1, //判断用户是否有过购买行为
     notice: "涨价了" //店铺公告
   }
 };

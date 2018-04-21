@@ -1,14 +1,16 @@
 const state = {
-  token: "",
+  orderNotice:false,
+  commonPopup: true,
+  token: sessionStorage.getItem("token") || "",
   count: 0,
-  name: "tanbiao",
   resultNum: 0,
   editAddress: {},
-  userId: 32,
+  userId: 1,
   qrCodeId: "10000",
   cartItems: [],
   defaultAddress: {},
-  addressLists: []
+  addressLists: [],
+  noticeOrders:[]
 };
 
 export default state;

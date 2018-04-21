@@ -17,7 +17,7 @@
 			</div>
 			<ul class="goods">
 				<WaterItem 
-          v-for="(item) in items" 
+          v-for="item in items" 
           :goods="item" 
           :key="item.id" 
           :dropBall="dropBall"
@@ -25,7 +25,10 @@
 			</ul>
 		</div>
 		<ShoppingCart :cartItems="items" ref="shopCart"/>
-		<OrderPopup ref="orderPopup"/>
+		<OrderPopup v-if="orderNotice" ref="orderPopup"/>
+    <WstPopup v-if="rebuy">
+      <BuyAgain slot="content" :item="wgInfo"/>
+    </WstPopup>
     <Dialog v-show="showQRCodeBinding" @confirm="onConfirm">
       <Field
         v-model="qrCodeId"
@@ -37,11 +40,14 @@
 </template>
 <script>
 import vue from "vue";
-import { BadgeGroup, Badge, Button, Dialog, Field } from "vant";
+import { BadgeGroup, Badge, Button, Dialog, Field, Toast } from "vant";
 import WaterItem from "./WaterItem";
 import ShoppingCart from "./ShoppingCart";
-import Header from "../components/Header";
-import OrderPopup from "../components/OrderPopup";
+import Header from "@/components/Header";
+import OrderPopup from "@/components/OrderPopup";
+import WstPopup from "@/components/WstPopup";
+import BuyAgain from "./BuyAgain"
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "BuyWater",
@@ -54,37 +60,49 @@ export default {
     ShoppingCart,
     OrderPopup,
     Dialog,
-    Field
+    Field,
+    Toast,
+    WstPopup,
+    BuyAgain
   },
   mounted() {
-    this.$apis.home
-      .getHpInfo({ userId: 1 })
+    this.setQrCodeId(1);
+    this.$apis.common
+      .auth({ qrCodeId: this.qrCodeId })
+      .then(res => {
+        const _CODE = "0000";
+        if (res.code == "0000") {
+          console.log("res.common.auth", res);
+          this.setToken(res.msg.token);
+          return this.$apis.home.getHpInfo({ qrCodeId: this.qrCodeId });
+        } else if (res.code == "1000") {
+          Toast.fail(res.desc);
+        } else if (res.code == "1001") {
+          Toast.fail(res.desc);
+        }
+        return Promise.reject(res);
+      })
       .then(res => {
         console.log("res", res);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    this.$apis.common
-      .auth({ qrCodeId: 1 })
-      .then(res => {
-        console.log("res.common.auth", res);
-        console.log(res.code)
-        if (res.code === "1001") {
-          console.log("-----", this.showQRCodeBinding)
-          this.showQRCodeBinding = true
-          this.$refs.orderPopup.showNotice()
+        //无成功或处理中的订单  - 无弹出页面
+        if (res.flag === 1) {
+          this.setOrderNotice(true);
+          this.setNoticeOrders(res.orderInfo)
+          //this.showQRCodeBinding = true
+          //this.$refs.orderPopup.showNotice()
+        } else if (res.flag === 2) {
+            this.rebuy= true
+            this.wgInfo = res.wgInfo
         }
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    this.$apis.home
-      .getWGList({
-        entityId: 1,
-        qrCodeId: 1
+        const qrCodeId = this.qrCodeId;
+        //获取当前店铺的商品列表
+        return this.$apis.home.getWGList({
+          entityId: 1,
+          qrCodeId
+        });
       })
       .then(res => {
+        console.log({ res });
         this.gList = res.msg.gList;
         this.items = this.gList[0].gInfo;
       })
@@ -95,14 +113,16 @@ export default {
   data() {
     return {
       activeKey: 0,
+      rebuy:false,
       gList: [],
+      wgInfo:{},
       items: [],
       itemsBuy: [],
-      showQRCodeBinding: false,
-      qrCodeId: ''
+      showQRCodeBinding: false
     };
   },
   computed: {
+    ...mapGetters(["userId", "qrCodeId", "orderNotice"]),
     brands() {
       let brands = [];
       if (this.gList.length > 0) {
@@ -118,6 +138,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      "setToken",
+      "setQrCodeId",
+      "setOrderNotice",
+      "setNoticeOrders"
+    ]),
     clickBrand(key) {
       this.activeKey = key;
       this.items = this.gList[key].gInfo;
@@ -130,10 +156,10 @@ export default {
       this.$router.push("personalOrder");
     },
     showNotice() {
-			this.$refs.orderPopup.showNotice()
-		},
-    onConfirm(){
-      console.log("绑定二维码")
+      this.$refs.orderPopup.showNotice();
+    },
+    onConfirm() {
+      console.log("绑定二维码");
     }
   }
 };

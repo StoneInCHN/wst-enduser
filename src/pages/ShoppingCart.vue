@@ -8,11 +8,11 @@
 		  	</div>
 		  	<div class="cart-price">
 		  		<span>￥{{totalPrice}}</span>
-		  		<span>￥14.00</span>
+		  		<span v-if="showDiscount">￥14.00</span>
 		  	</div>
 		  </van-col>
 		  <van-col span="9">
-		    <Button type="default" size="large" @click="buy">购买</Button>
+		    <Button type="default" :disabled="disabled" size="large" @click="buy">购买</Button>
 		  </van-col>
 		</Row>
 		<transition name="fade">
@@ -44,7 +44,7 @@
 	</div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { Button, Row, Col, Icon, Dialog } from "vant";
 import CartItem from "./CartItem";
 import { numAdd, numMul } from "../utils";
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       showDetails: false,
+      showDiscount:false,
       balls: [
         { show: false },
         { show: false },
@@ -72,6 +73,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["qrCodeId"]),
     items() {
       return this.cartItems.filter(item => item.count > 0);
     },
@@ -81,6 +83,9 @@ export default {
         count = count + item.count;
       });
       return count;
+    },
+    disabled(){
+      return this.totalCount === 0
     },
     totalPrice() {
       let price = 0;
@@ -100,9 +105,16 @@ export default {
     ]),
     buy() {
       console.log(this.items);
+      let gIds = {}
+      this.items.forEach(item=>{
+        console.log({item})
+          const id = item.id
+          gIds[id] = item.count
+      })
+      //const gIds ={ "1": 2, "2": 1 }
       const params = {
-        gIds: { "1": 2, "2": 1 },
-        qrCodeId: 1
+        gIds,
+        qrCodeId: this.qrCodeId
       };
       this.$apis.order
         .getPreInfo(params)

@@ -1,5 +1,5 @@
 
-import {fetch, post, patch, put} from '../config'
+import {fetch, post, patch, put, lift} from '../config'
 
 const baseUrl = "/"
 
@@ -12,7 +12,7 @@ const  home = {
     return fetch('/getUserInfo')
   },
   getHpInfo (params) {
-    return post('/shop/getHpInfo', params)
+    return lift(post('/endUser/getHpInfo', params))
   },
   /**
    * {

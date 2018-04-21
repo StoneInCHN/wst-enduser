@@ -1,6 +1,6 @@
 <template>
 	<li class="order-details-list-item">
-		<img :src="item.picUrl" :alt="fullName">
+    <div class="item-img" :style="imgStyle"/>
 		<p>
 			{{fullName}} <span> X {{item.count}}</span>
 		</p>
@@ -11,7 +11,7 @@
 	</li>
 </template>
 <script>
-import {numMul} from "../utils"
+import { numMul } from "../utils";
 export default {
   name: "OrderDetailsItem",
   props: {
@@ -20,15 +20,24 @@ export default {
       required: true
     }
   },
-  computed:{
-    fullName(){
-      return `${this.item.gName} (${this.item.gSpec})`
+  computed: {
+    fullName() {
+      return `${this.item.gName} (${this.item.gSpec})`;
     },
     totalOriginPrice() {
       return numMul(this.item.originPrice, this.item.count);
     },
     totalDistPrice() {
       return numMul(this.item.distPrice, this.item.count);
+    },
+    imgStyle() {
+      let style = {};
+      if (this.item.picUrl) {
+        style = {
+          backgroundImage: `url(${this.item.picUrl})`
+        };
+      }
+      return style;
     }
   }
 };
@@ -38,20 +47,21 @@ export default {
   position: relative;
   padding: 0 80px;
   box-sizing: border-box;
-  border-top:1px solid #DDDDDD;
+  border-top: 1px solid #dddddd;
   display: flex;
   align-items: center;
   height: 65px;
-  img {
+  .item-img {
     position: absolute;
     left: 22px;
     top: 4px;
     width: 56px;
-	height: 56px;
-	background-color: #D1D1D1;
+    height: 56px;
+    background: #f3f3f3 url("../assets/images/water.svg") no-repeat center;
+    background-size: cover;
   }
   p {
-	box-sizing: border-box;
+    box-sizing: border-box;
     font-size: 13px;
     flex: 1;
   }
@@ -64,11 +74,11 @@ export default {
     padding: 11px 0;
     span:first-child {
       text-decoration: line-through;
-	  font-size: 12px;
+      font-size: 12px;
     }
     span:last-child {
       font-size: 15px;
-	  color: red;
+      color: red;
     }
   }
 }

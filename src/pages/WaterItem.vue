@@ -1,6 +1,6 @@
 <template>
 	<li class="goods-item">
-		<img :src="goods.picUrl" :alt="fullName">
+    <div class="goods-img" :style="imgStyle"></div>
 		<div class="title">
 			<p>{{fullName}}</p>
 		</div>
@@ -33,6 +33,15 @@ export default {
     ...mapGetters([
       "cartItems"
     ]),
+    imgStyle(){
+      let style = {}
+      if(this.goods.picUrl){
+        style ={
+          backgroundImage: `url(${this.goods.picUrl})`
+        }
+      }
+      return style;
+    },
     hasValue() {
       return !(this.count > 0);
     },
@@ -119,6 +128,15 @@ export default {
     left: 0;
     top: 0;
     background-color: #f3f3f3;
+  }
+  .goods-img{
+    width: 74px;
+    height: 74px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #f3f3f3 url("../assets/images/water.svg") no-repeat center ;
+    background-size: cover;
   }
   .title {
     height: 44px;

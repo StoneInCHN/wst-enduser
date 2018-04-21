@@ -1,6 +1,6 @@
 const auth = {
-  code: "1001",
-  desc: "操作成功",
+  code: "0000",
+  desc: "店铺打烊",
   msg: {
     seriUserId: 3,
     token:
