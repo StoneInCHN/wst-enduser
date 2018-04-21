@@ -10,21 +10,26 @@ const mutations = {
   setEditAddress(state, { editAddress }) {
     state.editAddress = editAddress;
   },
-  setCartItems(state, { cartItems }) {
+  [types.SHOPPING_CART_SET_ITEMS](state, cartItems) {
     state.cartItems = cartItems;
+    console.log({cartItems})
+    sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
   },
-  setDefaultAddress(state, { defaultAddress }) {
+  [types.ADDRESS_SET_DEFAULT](state, defaultAddress) {
     state.defaultAddress = defaultAddress;
+    sessionStorage.setItem("defaultAddress", JSON.stringify(defaultAddress));
   },
-  setAddressLists(state, { addressLists }) {
+  [types.ADDRESS_SET_LIST](state, addressLists) {
     state.addressLists = addressLists;
+    sessionStorage.setItem("addressLists", JSON.stringify(addressLists));
   },
   [types.COM_SET_TOKEN](state, token) {
     state.token = token;
-    sessionStorage.setItem("token",token)
+    sessionStorage.setItem("token", token);
   },
   [types.COM_SET_QRCODE_ID](state, qrCodeId) {
     state.qrCodeId = qrCodeId;
+    sessionStorage.setItem("qrCodeId", qrCodeId);
   },
   [types.COM_SET_USER_ID](state, userId) {
     state.userId = userId;
@@ -38,6 +43,10 @@ const mutations = {
   [types.COM_SET_COMMON_POPUP](state, commonPopup) {
     state.commonPopup = commonPopup;
   },
+  [types.SHOP_SET_INFO](state, shopInfo) {
+    state.shopInfo = shopInfo;
+    sessionStorage.setItem("shopInfo", JSON.stringify(shopInfo));
+  }
 };
 
 export default mutations;

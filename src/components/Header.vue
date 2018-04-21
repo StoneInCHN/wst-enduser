@@ -3,13 +3,14 @@
 		<Button  :disabled="isCall" class="header-phone" @click="call">
 			<Icon name="phone"/>
 		</Button>
-		<p>{{notification}}</p>
-		<p>{{businessTime}}</p>
+		<p>{{shopInfo.shopName}}</p>
+		<p>{{`${shopInfo.bussBeginTime} -- ${shopInfo.bussEndTime}`}}</p>
 	</div>
 </template>
 <script>
 import { Button, Icon } from "vant";
 import { bg } from "@/assets/images";
+import { mapGetters } from "vuex"
 export default {
   name: "Header",
   components: {
@@ -23,6 +24,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["shopInfo"]),
     isCall() {
       return false;
     }

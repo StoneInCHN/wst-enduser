@@ -1,5 +1,5 @@
 <template>
-    <Popup v-model="show" class="wst-popup">
+    <Popup v-model="show" class="wst-popup" refs="commonPopup">
 		<div class="popup-header">
 			<Icon name="close" @click="close"/>
       <div class="close-line"/>

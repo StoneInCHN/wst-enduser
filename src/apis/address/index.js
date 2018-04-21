@@ -1,8 +1,8 @@
-import { fetch, post, patch, put } from "../config";
+import { fetch, post, patch, put, lift } from "../config";
 
 const address = {
   getAddrs(params) {
-    return post("/endUser/getAddrs", params);
+    return lift(post("/endUser/getAddrs", params));
   },
   newAddr(params) {
     return post("/endUser/newAddr", params);

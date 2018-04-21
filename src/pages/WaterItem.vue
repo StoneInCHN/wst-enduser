@@ -20,7 +20,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { numMul } from "../utils";
+import { numMul, urlPre } from "../utils";
 import { Stepper } from "vant";
 
 export default {
@@ -37,7 +37,7 @@ export default {
       let style = {}
       if(this.goods.picUrl){
         style ={
-          backgroundImage: `url(${this.goods.picUrl})`
+          backgroundImage: `url(${urlPre(this.goods.picUrl)})`
         }
       }
       return style;
@@ -109,7 +109,7 @@ export default {
         };
         resultItems.push(item);
       }
-      this.setCartItems({ cartItems: resultItems });
+      this.setCartItems(resultItems);
     }
   }
 };

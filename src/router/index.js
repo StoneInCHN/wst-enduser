@@ -9,6 +9,7 @@ const EditAddress = () => import('@/pages/address/editAddress')
 const OrderSuccess = () => import('@/pages/OrderSuccess')
 const WaterTickets = () => import('@/pages/WaterTickets')
 const PersonalOrder = () => import('@/pages/mine/Order')
+const Mine = () => import('@/pages/mine')
 
 Vue.use(Router)
 
@@ -53,6 +54,11 @@ export default new Router({
       path: '/personalOrder',
       name: 'PersonalOrder',
       component: PersonalOrder
+    },
+    {
+      path: '/mine',
+      name: 'mine',
+      component: Mine
     }
   ]
 })

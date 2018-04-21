@@ -5,7 +5,7 @@ import { Toast } from "vant";
 
 Vue.use(Toast);
 // 超时时间
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 10000;
 //
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
 
@@ -16,6 +16,11 @@ axios.interceptors.request.use(
   config => {
     const { token } = store.state;
     console.log({ store });
+    Toast.loading({
+      mask: true,
+      message: '加载中...',
+      duration: 10000
+    });
     if (token) {
       config.headers.post["X-Auth-Token"] = `${token}`;
     }
@@ -30,6 +35,7 @@ axios.interceptors.request.use(
 //返回状态判断
 axios.interceptors.response.use(
   res => {
+    Toast.clear()
     return Promise.resolve(res.data);
   },
   error => {
@@ -119,11 +125,11 @@ export function put(url, params = {}) {
 }
 
 export function lift(res) {
-  console.log({ res });
   return new Promise((resolve, reject) => {
     res.then(r => {
       const _CODE = "0000";
       if (r.code === _CODE) {
+        Toast.clear()
         resolve(r.msg);
       } else {
         Toast.fail(r.desc);

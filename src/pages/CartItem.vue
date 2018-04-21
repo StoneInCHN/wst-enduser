@@ -37,7 +37,11 @@ export default {
       "cartItems"
     ]),
     totalPrice() {
-      return numMul(this.item.count, this.item.originPrice);
+      if(this.item.count, this.item.originPrice){
+        return numMul(this.item.count, this.item.originPrice);
+      }else{
+        return 0
+      }
     },
     fullName(){
       return `${this.item.gName} (${this.item.gSpec})`
@@ -102,7 +106,7 @@ export default {
         };
         resultItems.push(item);
       }
-      this.setCartItems({ cartItems: resultItems });
+      this.setCartItems(resultItems);
     }
   }
 };

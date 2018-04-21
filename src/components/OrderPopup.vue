@@ -13,9 +13,9 @@
             <span class="name">{{`${item.gName} X ${item.count}`}}</span>
             <span class="price">{{`￥${item.amount}`}}</span>
         </p>
-				<p v-if="order.oStatus === 'PENDING'" class="status">快递员正在路上，请稍后</p>
+				<p v-if="order.oStatus === 'PROCESSING'" class="status">快递员正在路上，请稍后</p>
 				<Button type="default" size="large" @click="notice">很不爽,催一下</Button>
-        <Button class="cancel" type="default" size="large" @click="cancelOrder">取消订单</Button>
+        <Button v-if="order.oStatus === 'PENDING'" class="cancel" type="default" size="large" @click="cancelOrder(order.id)">取消订单</Button>
 			</div>
 		</div>
 	</Popup>
@@ -40,10 +40,9 @@ export default {
   },
   created() {
     this.show = this.orderNotice;
-    console.log(this.noticeOrders);
   },
   computed: {
-    ...mapGetters(["orderNotice", "noticeOrders"]),
+    ...mapGetters(["orderNotice", "noticeOrders", "qrCodeId"]),
     orderNum() {
       return this.noticeOrders.length || 0;
     }
@@ -59,15 +58,22 @@ export default {
       this.setOrderNotice(false);
     },
     notice() {
-      Toast("渴死了，送到哪儿了...")
+      Toast("渴死了，老板快接单...");
     },
-    cancelOrder() {
+    cancelOrder(id) {
       Dialog.confirm({
         title: "取消订单",
         message: "确定要取消订单吗?"
       })
         .then(() => {
-          Toast("取消成功")
+          const params = {
+            qrCodeId: this.qrCodeId,
+            entityId: id
+          };
+          console.log({ params });
+          this.$apis.order.cancelSO(params).then(r => {
+            Toast(r.desc);
+          });
         })
         .catch(() => {
           // on cancel
@@ -108,7 +114,7 @@ export default {
     }
     h6 {
       font-weight: 300;
-      font-size: 18px;
+      font-size: 1rem;
     }
   }
   .popup-content {

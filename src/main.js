@@ -5,7 +5,7 @@ import store from './store'
 import FastClick from 'fastclick'
 import apis from './apis/index'
 
-require("./mock")
+//require("./mock")
 
 import './reset.css'
 

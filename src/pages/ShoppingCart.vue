@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       showDetails: false,
-      showDiscount:false,
+      showDiscount: false,
       balls: [
         { show: false },
         { show: false },
@@ -79,54 +79,51 @@ export default {
     },
     totalCount() {
       let count = 0;
-      this.cartItems.map(item => {
-        count = count + item.count;
-      });
+      if (this.cartItems && this.cartItems.length > 0) {
+        this.cartItems.map(item => {
+          count = count + item.count;
+        });
+      }
       return count;
     },
-    disabled(){
-      return this.totalCount === 0
+    disabled() {
+      return this.totalCount === 0;
     },
     totalPrice() {
       let price = 0;
-      this.cartItems.forEach(item => {
-        let total = numMul(item.originPrice, item.count);
-        price = numAdd(price, total);
-      });
+      if (this.cartItems && this.cartItems.length > 0) {
+        this.cartItems.forEach(item => {
+          let total = numMul(item.originPrice, item.count);
+          price = numAdd(price, total);
+        });
+      }
       return price;
     },
     cartItems() {
       return this.$store.state.cartItems;
+    },
+    gIds() {
+      let gIds = {};
+      if (this.items && this.items.length > 0) {
+        this.items.forEach(item => {
+          gIds[item.id] = item.count;
+        });
+      }
+      return gIds;
     }
   },
   methods: {
-    ...mapActions([
-      "setDefaultAddress"
-    ]),
+    ...mapActions(["setDefaultAddress"]),
     buy() {
-      console.log(this.items);
-      let gIds = {}
-      this.items.forEach(item=>{
-        console.log({item})
-          const id = item.id
-          gIds[id] = item.count
-      })
-      //const gIds ={ "1": 2, "2": 1 }
       const params = {
-        gIds,
+        gIds: this.gIds,
         qrCodeId: this.qrCodeId
       };
-      this.$apis.order
-        .getPreInfo(params)
-        .then(res => {
-          console.log("res", res);
-          console.log("addrInfo", res.msg.addrInfo);
-          this.setDefaultAddress(res.msg.addrInfo)
-          this.$router.push("/order");
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$apis.order.getPreInfo(params).then(res => {
+        console.log("addrInfo", res.addrInfo);
+        this.setDefaultAddress(res.addrInfo);
+        this.$router.push("/order");
+      });
     },
     toggleDetails() {
       this.showDetails = !this.showDetails;

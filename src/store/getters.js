@@ -12,7 +12,8 @@ const getters = {
   qrCodeId: state => state.qrCodeId,
   orderNotice: state => state.orderNotice,
   noticeOrders: state => state.noticeOrders,
-  commonPopup: state => state.commonPopup
+  commonPopup: state => state.commonPopup,
+  shopInfo: state => state.shopInfo
 };
 
 export default getters;

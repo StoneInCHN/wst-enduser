@@ -10,14 +10,14 @@ const actions = {
   setEditAddress({ commit }, payload) {
     commit("setEditAddress", payload);
   },
-  setCartItems({ commit }, payload) {
-    commit("setCartItems", payload);
+  setCartItems({ commit }, cartItems) {
+    commit(types.SHOPPING_CART_SET_ITEMS, cartItems);
   },
-  setDefaultAddress({ commit }, payload) {
-    commit("setDefaultAddress", { defaultAddress: payload });
+  setDefaultAddress({ commit }, defaultAddress) {
+    commit(types.ADDRESS_SET_DEFAULT, defaultAddress);
   },
-  setAddressLists({ commit }, payload) {
-    commit("setAddressLists", { addressLists: payload });
+  setAddressLists({ commit }, addressLists) {
+    commit(types.ADDRESS_SET_LIST, addressLists);
   },
   setToken({ commit }, token) {
     commit(types.COM_SET_TOKEN, token);
@@ -36,6 +36,9 @@ const actions = {
   },
   setCommonPopup({ commit }, commonPopup) {
     commit(types.COM_SET_COMMON_POPUP, commonPopup);
+  },
+  setShopInfo({ commit }, shopInfo) {
+    commit(types.SHOP_SET_INFO, shopInfo);
   }
 };
 

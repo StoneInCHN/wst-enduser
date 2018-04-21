@@ -22,13 +22,14 @@ export default {
       qrCodeId: this.qrCodeId
     };
     this.$apis.address.getAddrs(params).then(res => {
-      this.addrs = res.msg.addrInfo;
-      this.setAddressLists(res.msg.addrInfo)
+      this.addrs = res.addrInfo;
+      this.setAddressLists(res.addrInfo);
+      this.setDefault();
     });
   },
   data() {
     return {
-      chosenAddressId: 1,
+      chosenAddressId: 0,
       addrs: []
     };
   },
@@ -51,9 +52,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      "setAddressLists"
-    ]),
+    ...mapActions(["setAddressLists"]),
+    setDefault() {
+      if (this.addrs && this.addrs.length > 0) {
+        this.addrs.forEach(item => {
+          if (item.isDefault) {
+            this.chosenAddressId = item.id || 0;
+          }
+        });
+      }
+    },
     onAdd() {
       this.$router.push("addAddress");
     },
@@ -69,6 +77,19 @@ export default {
     select(item, index) {
       console.log({ item, index });
       this.chosenAddressId = item.id;
+      let defaultAddr = {};
+      const lists = this.addrs.forEach(addr => {
+        if (addr.id === item.id) {
+          addr.isDefault = true;
+          defaultAddr = addr;
+        } else {
+          addr.isDefault = false;
+        }
+      });
+
+      console.log({ defaultAddr });
+
+      //this.$router.push("/order");
     }
   }
 };

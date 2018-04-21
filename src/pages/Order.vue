@@ -31,7 +31,7 @@
 			<section>
         <h6>支付方式</h6>
         <CellGroup>
-            <Cell title="水票支付" isLink @click="changePayMethod">
+            <Cell title="支付方式" isLink @click="changePayMethod">
               <p class="pay-method" solt>
                 {{payMethodName}}
               </p>
@@ -72,50 +72,37 @@ export default {
     Actionsheet,
     OrderItem
   },
-  mounted(){
-    console.log("mounted ", this.cartItems)
+  mounted() {
+    console.log("mounted ", this.cartItems);
   },
   data() {
     return {
       showPayMethod: false,
-      payMethodName: "微信付款",
+      payMethodName: "货到付款",
       actions: [
         {
-          key: 1,
-          name: "微信支付",
-          callback: this.onClick
-        },
-        {
-          key: 2,
-          name: "水票支付 （共2张 可用1张）",
-          callback: this.onClick
-        },
-        {
-          key: 3,
+          key: "COB",
           name: "货到付款",
           callback: this.onClick
         }
       ]
     };
   },
-  mounted(){
-    console.log("defaultAddress", this.defaultAddress)
+  mounted() {
+    console.log("defaultAddress", this.defaultAddress);
   },
   computed: {
-    ...mapGetters([
-      "cartItems",
-      "defaultAddress"
-    ]),
-    hasDefaultAddress(){
-      return !!this.defaultAddress
+    ...mapGetters(["cartItems", "defaultAddress", "userId", "qrCodeId"]),
+    hasDefaultAddress() {
+      return !!this.defaultAddress;
     },
     count: {
       get() {
-        console.log("count ", this.cartItems)
+        console.log("count ", this.cartItems);
         let count = 0;
         if (this.cartItems && this.cartItems.length > 0) {
           this.cartItems.forEach(item => {
-              count = item.count;
+            count = item.count;
           });
         }
         return count;
@@ -124,17 +111,28 @@ export default {
     },
     totalPrice() {
       let price = 0;
-      this.cartItems.forEach(item => {
-        let total = numMul(item.originPrice, item.count);
-        price = numAdd(price, total);
-      });
+      if (this.cartItems && this.cartItems.length > 0) {
+        this.cartItems.forEach(item => {
+          let total = numMul(item.originPrice, item.count);
+          price = numAdd(price, total);
+        });
+      }
       return `￥${price}`;
     },
+    gIds() {
+      let gIds = {};
+      if (this.cartItems && this.cartItems.length > 0)
+        this.cartItems.forEach(item => {
+          gIds[item.id] = item.count;
+        });
+      return gIds;
+    },
+    addrId() {
+      return this.defaultAddress.id;
+    }
   },
   methods: {
-    ...mapActions([
-      "setCartItems"
-    ]),
+    ...mapActions(["setCartItems"]),
     addAddress() {
       console.log("addAddress");
       this.$router.push("/listAddress");
@@ -150,7 +148,19 @@ export default {
       this.$router.push("/listAddress");
     },
     submitHandler() {
-      this.$router.push("/orderSuccess");
+      //this.$router.push("/orderSuccess");
+      const params = {
+        qrCodeId: this.qrCodeId,
+        addrId: this.addrId,
+        userId: this.userId,
+        payType: "COB",
+        gIds: this.gIds
+      };
+      console.log({ params });
+      /** 
+      this.$api.order.createSO(params).then(r => {
+        console.log({ r });
+      });*/
     }
   }
 };

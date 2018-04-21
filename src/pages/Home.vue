@@ -12,7 +12,7 @@
           />
 				</BadgeGroup>
 				<div class="profile">
-					<Button @click="personalOrder">我的</Button>
+					<Button @click="mine">我的</Button>
 				</div>
 			</div>
 			<ul class="goods">
@@ -27,7 +27,7 @@
 		<ShoppingCart :cartItems="items" ref="shopCart"/>
 		<OrderPopup v-if="orderNotice" ref="orderPopup"/>
     <WstPopup v-if="rebuy">
-      <BuyAgain slot="content" :item="wgInfo"/>
+      <BuyAgain slot="content" :item="wgInfo" :close="closeBuyAgain"/>
     </WstPopup>
     <Dialog v-show="showQRCodeBinding" @confirm="onConfirm">
       <Field
@@ -46,7 +46,7 @@ import ShoppingCart from "./ShoppingCart";
 import Header from "@/components/Header";
 import OrderPopup from "@/components/OrderPopup";
 import WstPopup from "@/components/WstPopup";
-import BuyAgain from "./BuyAgain"
+import BuyAgain from "./BuyAgain";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -85,14 +85,31 @@ export default {
       .then(res => {
         console.log("res", res);
         //无成功或处理中的订单  - 无弹出页面
+        const {
+          bussBeginTime,
+          bussEndTime,
+          id,
+          mobilePhoneNum,
+          notice,
+          shopName
+        } = res;
+
+        const shop = {
+          bussBeginTime,
+          bussEndTime,
+          id,
+          mobilePhoneNum,
+          notice,
+          shopName
+        };
+        console.log({shop});
+        this.setShopInfo(shop)
         if (res.flag === 1) {
           this.setOrderNotice(true);
-          this.setNoticeOrders(res.orderInfo)
-          //this.showQRCodeBinding = true
-          //this.$refs.orderPopup.showNotice()
+          this.setNoticeOrders(res.orderInfo);
         } else if (res.flag === 2) {
-            this.rebuy= true
-            this.wgInfo = res.wgInfo
+          this.rebuy = true;
+          this.wgInfo = res.wgInfo;
         }
         const qrCodeId = this.qrCodeId;
         //获取当前店铺的商品列表
@@ -113,16 +130,16 @@ export default {
   data() {
     return {
       activeKey: 0,
-      rebuy:false,
+      rebuy: false,
       gList: [],
-      wgInfo:{},
+      wgInfo: {},
       items: [],
       itemsBuy: [],
       showQRCodeBinding: false
     };
   },
   computed: {
-    ...mapGetters(["userId", "qrCodeId", "orderNotice"]),
+    ...mapGetters(["userId", "qrCodeId", "orderNotice", "shopInfo"]),
     brands() {
       let brands = [];
       if (this.gList.length > 0) {
@@ -142,7 +159,8 @@ export default {
       "setToken",
       "setQrCodeId",
       "setOrderNotice",
-      "setNoticeOrders"
+      "setNoticeOrders",
+      "setShopInfo"
     ]),
     clickBrand(key) {
       this.activeKey = key;
@@ -152,14 +170,17 @@ export default {
       e = e || window.event;
       this.$refs.shopCart.drop(e.target);
     },
-    personalOrder() {
-      this.$router.push("personalOrder");
+    mine() {
+      this.$router.push("mine");
     },
     showNotice() {
       this.$refs.orderPopup.showNotice();
     },
     onConfirm() {
       console.log("绑定二维码");
+    },
+    closeBuyAgain() {
+      this.rebuy = false;
     }
   }
 };
