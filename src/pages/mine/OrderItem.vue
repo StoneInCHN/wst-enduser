@@ -1,7 +1,7 @@
 <template>
   <li class="order-item">
         <div class="date">
-            <span>{{item.createDate}}</span>
+            <span>{{item.createDate | formatDate}}</span>
             <span class="status">{{getStatic(item.oStatus)}}</span>
         </div> 
         <section class="item-info" v-for="subItem in item.orderItems" :key="subItem.id">
@@ -31,6 +31,7 @@
 import { Button, Dialog, Toast } from "vant";
 import { OrderStatusEnum } from "../../shared/consts";
 import { mapActions, mapGetters } from "vuex";
+import { formatDate } from "../../utils"
 export default {
   name: "OrderItem",
   components: {
@@ -48,7 +49,7 @@ export default {
     console.log("item", this.item);
   },
   computed: {
-    ...mapGetters(["qrCodeId"]),
+    ...mapGetters(["qrCodeId", "historyOrders"]),
     imgStyle(){
       let style = {}
       if(this.item.picUrl){
@@ -60,6 +61,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["setHistoryOrders"]),
     getStatic(key) {
       return OrderStatusEnum[key];
     },
@@ -74,12 +76,25 @@ export default {
           };
           this.$apis.order.cancelSO(params).then(r => {
             console.log({ r });
+            const lists = this.historyOrders.map(order=>{
+                if(order.id === this.item.id){
+                  order.oStatus = "CANCEL"
+                }
+                return order
+            })
+            console.log({lists})
           });
         })
         .catch(() => {});
     },
     press() {
       Toast("已催促商家!");
+    }
+  },
+  filters:{
+    formatDate (time) {
+      let date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   }
 };

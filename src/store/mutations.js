@@ -46,7 +46,20 @@ const mutations = {
   [types.SHOP_SET_INFO](state, shopInfo) {
     state.shopInfo = shopInfo;
     sessionStorage.setItem("shopInfo", JSON.stringify(shopInfo));
+  },
+  [types.ORDER_SET_SUCCESS_ORDER](state, successOrder) {
+    state.successOrder = successOrder;
+    sessionStorage.setItem("successOrder", JSON.stringify(successOrder));
+  },
+  [types.ORDER_SET_HISTORY_ORDER](state, historyOrders) {
+    save(state, "historyOrders", historyOrders)
   }
 };
+
+function save(state, key, value){
+  state[key] = value;
+  sessionStorage.setItem(`${key}`, JSON.stringify(value));
+}
+
 
 export default mutations;

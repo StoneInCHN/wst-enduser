@@ -13,7 +13,9 @@ const getters = {
   orderNotice: state => state.orderNotice,
   noticeOrders: state => state.noticeOrders,
   commonPopup: state => state.commonPopup,
-  shopInfo: state => state.shopInfo
+  shopInfo: state => state.shopInfo,
+  successOrder: state => state.successOrder,
+  historyOrders: state=> state.historyOrders
 };
 
 export default getters;

@@ -12,7 +12,9 @@ const state = {
   defaultAddress: getItem("defaultAddress") || {},
   addressLists: getItem("addressLists") || [],
   noticeOrders: [],
-  shopInfo: getItem("shopInfo") || {}
+  shopInfo: getItem("shopInfo") || {},
+  successOrder:getItem("successOrder") || {},
+  historyOrders: getItem("historyOrders") || []
 };
 
 function getItem(key) {

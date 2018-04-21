@@ -2,13 +2,17 @@
   <div class="app-order-success">
       <p>购买成功</p>
       <h4>您购买的商品马上送到</h4>
-      <p>货到后，你还需要支付 <span>￥12.53 </span></p>
+      <p>货到后，你还需要支付 <span>￥{{successOrder.cobAmount}}</span></p>
       <p>您可以再次扫描二维码关注订单状态</p>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: "OrderSuccess"
+  name: "OrderSuccess",
+  computed:{
+    ...mapGetters(["successOrder"])
+  }
 };
 </script>
 <style lang="less">

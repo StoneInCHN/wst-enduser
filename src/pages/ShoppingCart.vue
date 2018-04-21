@@ -8,7 +8,7 @@
 		  	</div>
 		  	<div class="cart-price">
 		  		<span>￥{{totalPrice}}</span>
-		  		<span v-if="showDiscount">￥14.00</span>
+		  		<span v-if="showDiscount" class="discount">￥14.00</span>
 		  	</div>
 		  </van-col>
 		  <van-col span="9">
@@ -250,7 +250,7 @@ export default {
         font-size: 17px;
       }
 
-      span:last-child {
+      span.discount {
         font-size: 10px;
         margin-left: 10px;
         text-decoration: line-through;

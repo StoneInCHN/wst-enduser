@@ -39,6 +39,12 @@ const actions = {
   },
   setShopInfo({ commit }, shopInfo) {
     commit(types.SHOP_SET_INFO, shopInfo);
+  },
+  setSuccessOrder({ commit }, successOrder) {
+    commit(types.ORDER_SET_SUCCESS_ORDER, successOrder);
+  },
+  setHistoryOrders({ commit }, historyOrders) {
+    commit(types.ORDER_SET_HISTORY_ORDER, historyOrders);
   }
 };
 

@@ -3,7 +3,7 @@
     <div class="order-header">
       <Button v-if="!hasDefaultAddress" class="add-address-btn" size="small" @click="addAddress">+新增收货地址</Button>
       <div class="order-address" v-if="hasDefaultAddress">
-        <h6>{{ `${defaultAddress.addr} ${defaultAddress.doorNum}`}}</h6>
+        <h6>{{ `${defaultAddress.addr || ""} ${defaultAddress.doorNum || ""}`}}</h6>
 				<p>
 					<span>{{defaultAddress.contactName}}</span>
 					<span>{{defaultAddress.contactPhone}}</span>
@@ -56,7 +56,8 @@ import {
   Cell,
   CellGroup,
   Tag,
-  Actionsheet
+  Actionsheet,
+  Toast
 } from "vant";
 import OrderItem from "./OrderDetailsItem";
 export default {
@@ -70,7 +71,8 @@ export default {
     CellGroup,
     Tag,
     Actionsheet,
-    OrderItem
+    OrderItem,
+    Toast
   },
   mounted() {
     console.log("mounted ", this.cartItems);
@@ -132,9 +134,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setCartItems"]),
+    ...mapActions(["setCartItems","setSuccessOrder"]),
     addAddress() {
-      console.log("addAddress");
       this.$router.push("/listAddress");
     },
     changePayMethod() {
@@ -148,7 +149,6 @@ export default {
       this.$router.push("/listAddress");
     },
     submitHandler() {
-      //this.$router.push("/orderSuccess");
       const params = {
         qrCodeId: this.qrCodeId,
         addrId: this.addrId,
@@ -157,10 +157,20 @@ export default {
         gIds: this.gIds
       };
       console.log({ params });
-      /** 
-      this.$api.order.createSO(params).then(r => {
+      this.$apis.order.createSO(params).then(r => {
         console.log({ r });
-      });*/
+        Toast.success({
+          message:"订单创建成功",
+          mask: true,
+          forbidClick: true,
+          duration:1000
+        })
+        this.setSuccessOrder(r)
+        this.setCartItems([])
+        setTimeout(()=>{
+          this.$router.push("/orderSuccess");
+        },500)
+      });
     }
   }
 };

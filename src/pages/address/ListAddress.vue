@@ -52,7 +52,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setAddressLists"]),
+    ...mapActions(["setAddressLists","setDefaultAddress"]),
     setDefault() {
       if (this.addrs && this.addrs.length > 0) {
         this.addrs.forEach(item => {
@@ -78,18 +78,20 @@ export default {
       console.log({ item, index });
       this.chosenAddressId = item.id;
       let defaultAddr = {};
-      const lists = this.addrs.forEach(addr => {
+      let lists = []
+      this.addrs.forEach(addr => {
         if (addr.id === item.id) {
           addr.isDefault = true;
           defaultAddr = addr;
         } else {
           addr.isDefault = false;
         }
+        lists.push(addr)
       });
-
-      console.log({ defaultAddr });
-
-      //this.$router.push("/order");
+      console.log({ defaultAddr, lists });
+      this.setAddressLists(lists)
+      this.setDefaultAddress(defaultAddr)
+      this.$router.push("/order");
     }
   }
 };
