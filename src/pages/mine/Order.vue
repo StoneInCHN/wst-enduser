@@ -35,7 +35,7 @@ export default {
     const params = {
       userId: this.userId,
       qrCodeId: this.qrCodeId,
-      pageSize: 20,
+      pageSize: 50,
       pageNumber: 1
     };
     this.$apis.order.pageUserOrders(params).then(r => {

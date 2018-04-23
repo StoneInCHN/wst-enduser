@@ -8,7 +8,7 @@
 	</div>
 </template>
 <script>
-import { Button, Icon } from "vant";
+import { Button, Icon, Toast } from "vant";
 import { bg } from "@/assets/images";
 import { mapGetters } from "vuex"
 export default {
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     call() {
-      alert("店家已经休息了");
+      Toast("店家已经休息了");
     }
   }
 };

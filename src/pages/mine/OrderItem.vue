@@ -45,9 +45,6 @@ export default {
       required: true
     }
   },
-  mounted() {
-    console.log("item", this.item);
-  },
   computed: {
     ...mapGetters(["qrCodeId", "historyOrders"]),
     imgStyle(){
@@ -75,20 +72,23 @@ export default {
             entityId: this.item.id
           };
           this.$apis.order.cancelSO(params).then(r => {
-            console.log({ r });
             const lists = this.historyOrders.map(order=>{
                 if(order.id === this.item.id){
                   order.oStatus = "CANCEL"
                 }
                 return order
             })
-            console.log({lists})
           });
         })
-        .catch(() => {});
     },
     press() {
-      Toast("已催促商家!");
+      Toast.loading({
+        mask: true,
+        message: '催促中...'
+      });
+      setTimeout(()=>{
+        Toast("已催促商家!");
+      },1000)
     }
   },
   filters:{

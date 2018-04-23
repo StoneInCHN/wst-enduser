@@ -8,7 +8,7 @@
 		<div class="popup-content">
 			<div class="order-item" v-for="order in noticeOrders" :key="order.id">
 				<p class="date">您在{{order.createDate|formatDate}}下单</p>
-				<p >{{order.addrDetail}}</p>
+				<p v-if="!!order.addrDetail">{{order.addrDetail}}</p>
 				<p class="price-info" v-for="(item, index) in order.item" :key="index">
             <span class="name">{{`${item.gName} X ${item.count}`}}</span>
             <span class="price">{{`￥${item.amount}`}}</span>
@@ -70,9 +70,12 @@ export default {
             qrCodeId: this.qrCodeId,
             entityId: id
           };
-          console.log({ params });
           this.$apis.order.cancelSO(params).then(r => {
             Toast(r.desc);
+            const lists = this.noticeOrders.filter(order => {
+              return order.id !== id;
+            });
+            this.setNoticeOrders(lists);
           });
         })
         .catch(() => {
