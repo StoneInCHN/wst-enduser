@@ -1,7 +1,7 @@
 <template>
   <div class="buy-again">
       <p>你上次购买了{{item.gCount}}桶</p>
-      <h6>{{`${item.gName} X ${item.gCount} 价格:${item.gAmount}`}}</h6>
+      <h6>{{`${item.gName} X ${item.gCount} 价格:${totalPrice}`}}</h6>
       <Button type="default" size="large" @click="buyAgain">再来一桶</Button>
       <Button class="cancel" type="default" size="large" @click="change">换个口味</Button>
   </div>
@@ -25,62 +25,85 @@ export default {
       required: true
     }
   },
-  created(){
-    const {item, close} = this
-    console.log({item, close})
+  created() {
+    const { item, close } = this;
+    console.log({ item, close });
+    if (!item.gCount) {
+      this.item.gCount = 1;
+    }
   },
   computed: {
-    ...mapGetters(["commonPopup","cartItems"])
+    ...mapGetters(["commonPopup", "cartItems", "qrCodeId"]),
+    totalPrice() {
+      const { gCount = 1, gDistPrice } = this.item;
+      return gCount * gDistPrice;
+    },
+    items() {
+      return this.cartItems.filter(item => item.count > 0);
+    },
+    gIds() {
+      let gIds = {};
+      if (this.items && this.items.length > 0) {
+        this.items.forEach(item => {
+          gIds[item.id] = item.count;
+        });
+      }
+      return gIds;
+    }
   },
   methods: {
-    ...mapActions(["setCommonPopup","setCartItems"]),
+    ...mapActions(["setCommonPopup", "setCartItems", "setDefaultAddress"]),
     buyAgain() {
       console.log("buy again");
-      //this.findItems("add")
+      this.addItems();
+      const params = {
+        gIds: this.gIds,
+        qrCodeId: this.qrCodeId
+      };
+      this.$apis.order.getPreInfo(params).then(res => {
+        console.log("addrInfo", res.addrInfo);
+        this.setDefaultAddress(res.addrInfo);
+        this.$router.push("/order");
+      });
     },
     change() {
       console.log("change");
-      this.close()
-      this.setCommonPopup(false)
+      this.close();
+      this.setCommonPopup(false);
     },
-    findItems(type) {
-      // type add加 minus 减
+    addItems() {
       const cartItems = this.cartItems;
+      const goods = this.item;
+      console.log({ cartItems, goods });
       let flag = false;
       let resultItems = [];
+
+      //检查购物车中是否已包含改商品
       if (cartItems && cartItems.length > 0) {
         cartItems.forEach(item => {
-          if (item.id === this.goods.id) {
-            if ("add" === type) {
-              ++item.count;
-              flag = true;
-              resultItems.push(item);
-            } else if ("minus" === type) {
-              --item.count;
-              if (item.count > 0) {
-                resultItems.push(item);
-              }
-            }
-          } else {
-            resultItems.push(item);
+          if (item.id === goods.gId) {
+            item.count += 1
+            flag = true; 
           }
+          resultItems.push(item);
         });
       }
 
       //store中的cartItems中没有当前选择的商品
-      if (!flag && "add" === type) {
+      if (!flag) {
         const item = {
-          id: this.goods.id,
-          picUrl: this.goods.picUrl,
-          gName: this.goods.gName,
-          originPrice: this.goods.originPrice,
-          distPrice: this.goods.distPrice,
-          gSpec: this.goods.gSpec,
-          count: 1
+          id: goods.gId,
+          picUrl: goods.gPic,
+          gName: goods.gName,
+          originPrice: goods.gOriginPrice,
+          distPrice: goods.gDistPrice,
+          gSpec: goods.gSpec || "",
+          count: goods.gCount
         };
+        console.log({item})
         resultItems.push(item);
       }
-      this.setCartItems({ cartItems: resultItems });
+      this.setCartItems(resultItems);
     }
   }
 };

@@ -72,7 +72,6 @@ export default {
       .then(res => {
         const _CODE = "0000";
         if (res.code == "0000") {
-          console.log("res.common.auth", res);
           this.setToken(res.msg.token);
           return this.$apis.home.getHpInfo({ qrCodeId: this.qrCodeId });
         } else if (res.code == "1000") {
@@ -83,7 +82,6 @@ export default {
         return Promise.reject(res);
       })
       .then(res => {
-        console.log("res", res);
         //无成功或处理中的订单  - 无弹出页面
         const {
           bussBeginTime,
@@ -102,14 +100,15 @@ export default {
           notice,
           shopName
         };
-        console.log({shop});
         this.setShopInfo(shop)
-        if (res.flag === 1) {
+        if (this.noticeFlag && res.flag === 1) {
           this.setOrderNotice(true);
           this.setNoticeOrders(res.orderInfo);
-        } else if (res.flag === 2) {
+          this.setNoticeFlag(false)
+        } else if (this.noticeFlag && res.flag === 2) {
           this.rebuy = true;
           this.wgInfo = res.wgInfo;
+          this.setNoticeFlag(false)
         }
         const qrCodeId = this.qrCodeId;
         //获取当前店铺的商品列表
@@ -119,7 +118,6 @@ export default {
         });
       })
       .then(res => {
-        console.log({ res });
         this.gList = res.msg.gList;
         this.items = this.gList[0].gInfo;
       })
@@ -139,7 +137,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userId", "qrCodeId", "orderNotice", "shopInfo"]),
+    ...mapGetters(["userId", "qrCodeId", "orderNotice", "shopInfo", "noticeFlag"]),
     brands() {
       let brands = [];
       if (this.gList.length > 0) {
@@ -160,7 +158,8 @@ export default {
       "setQrCodeId",
       "setOrderNotice",
       "setNoticeOrders",
-      "setShopInfo"
+      "setShopInfo",
+      "setNoticeFlag"
     ]),
     clickBrand(key) {
       this.activeKey = key;

@@ -45,6 +45,9 @@ const actions = {
   },
   setHistoryOrders({ commit }, historyOrders) {
     commit(types.ORDER_SET_HISTORY_ORDER, historyOrders);
+  },
+  setNoticeFlag({ commit }, noticeFlag) {
+    commit(types.COM_SET_NOTICE_FLAG, noticeFlag);
   }
 };
 

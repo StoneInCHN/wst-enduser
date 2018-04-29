@@ -33,6 +33,7 @@ const mutations = {
   },
   [types.COM_SET_USER_ID](state, userId) {
     state.userId = userId;
+    sessionStorage.setItem("userId", userId);
   },
   [types.COM_SET_ORDER_NOTICE](state, orderNotice) {
     state.orderNotice = orderNotice;
@@ -53,6 +54,10 @@ const mutations = {
   },
   [types.ORDER_SET_HISTORY_ORDER](state, historyOrders) {
     save(state, "historyOrders", historyOrders)
+  },
+  [types.COM_SET_NOTICE_FLAG](state, noticeFlag) {
+    save(state, "noticeFlag", noticeFlag)
+    sessionStorage.setItem("noticeFlag", noticeFlag);
   }
 };
 

@@ -9,7 +9,9 @@ axios.defaults.timeout = 10000;
 //
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
 
-axios.defaults.baseURL = "http://localhost:8080/wst-customer/";
+axios.defaults.baseURL = "/wst-customer/";
+
+//axios.defaults.baseURL =  "http://47.106.96.230:10001/wst-customer/"
 
 // http请求拦截器
 axios.interceptors.request.use(

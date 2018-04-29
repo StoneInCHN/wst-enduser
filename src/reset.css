@@ -3,7 +3,8 @@
 html {
   -webkit-text-size-adjust: none;
   -ms-text-size-adjust: none;
-  font-family: "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
+  font-family: "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
+    "WenQuanYi Micro Hei";
   height: 100%;
 }
 
@@ -131,7 +132,8 @@ section {
 
 body {
   background: #ffffff;
-  font-family: "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
+  font-family: "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
+    "WenQuanYi Micro Hei";
   height: 100%;
   color: #191919;
 }
@@ -160,7 +162,7 @@ strong {
 a {
   text-decoration: none;
   color: #191919;
-  font-family: '黑体', Microsoft YaHei, Tahoma, Arial, sans-serif;
+  font-family: "黑体", Microsoft YaHei, Tahoma, Arial, sans-serif;
 }
 
 a:hover {
@@ -179,7 +181,7 @@ h4,
 h5,
 h6 {
   font-size: 100%;
-  font-family: "PingFang SC",  "Microsoft YaHei";
+  font-family: "PingFang SC", "Microsoft YaHei";
 }
 
 img {
