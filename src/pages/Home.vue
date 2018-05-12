@@ -66,13 +66,18 @@ export default {
     BuyAgain
   },
   mounted() {
-    this.setQrCodeId(1);
+    const qrCodeId =location.hash.split("#/?id=")[1]
+    if(!qrCodeId){
+      Toast("无效参数")
+    }
+    this.setQrCodeId(qrCodeId);
     this.$apis.common
       .auth({ qrCodeId: this.qrCodeId })
       .then(res => {
         const _CODE = "0000";
         if (res.code == "0000") {
           this.setToken(res.msg.token);
+          this.setUserId(res.msg.seriUserId)
           return this.$apis.home.getHpInfo({ qrCodeId: this.qrCodeId });
         } else if (res.code == "1000") {
           Toast.fail(res.desc);
@@ -155,6 +160,7 @@ export default {
   methods: {
     ...mapActions([
       "setToken",
+      "setUserId",
       "setQrCodeId",
       "setOrderNotice",
       "setNoticeOrders",

@@ -20,7 +20,7 @@ const state = {
   count: 0,
   resultNum: 0,
   editAddress: {},
-  userId: 1,
+  userId: 0,
   qrCodeId: sessionStorage.getItem("qrCodeId") || "",
   cartItems: getItem("cartItems") || [],
   //cartItems:[],

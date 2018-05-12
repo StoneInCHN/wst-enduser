@@ -3,8 +3,8 @@
 		<Button  :disabled="isCall" class="header-phone" @click="call">
 			<Icon name="phone"/>
 		</Button>
-		<p>{{shopInfo.shopName}}</p>
-		<p>{{`${shopInfo.bussBeginTime} -- ${shopInfo.bussEndTime}`}}</p>
+		<p>{{shopInfo.shopName || ""}}</p>
+		<p>{{`${shopInfo.bussBeginTime || ""} -- ${shopInfo.bussEndTime || ""}`}}</p>
 	</div>
 </template>
 <script>
@@ -46,6 +46,8 @@ export default {
   top: 0;
   right: 0;
   z-index: 2;
+  height: 64px;
+  box-sizing: border-box;
 }
 .header-phone {
   position: absolute;
