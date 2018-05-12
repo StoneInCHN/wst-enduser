@@ -29,7 +29,11 @@
     <WstPopup v-if="rebuy">
       <BuyAgain slot="content" :item="wgInfo" :close="closeBuyAgain"/>
     </WstPopup>
-    <Dialog v-show="showQRCodeBinding" @confirm="onConfirm">
+    <Dialog 
+      v-show="showQRCodeBinding" 
+      show-cancel-button
+      :before-close="beforeClose"
+      >
       <Field
         v-model="qrCodeId"
         label="用户编号"
@@ -82,7 +86,10 @@ export default {
         } else if (res.code == "1000") {
           Toast.fail(res.desc);
         } else if (res.code == "1001") {
+          //未绑定
           Toast.fail(res.desc);
+          console.log(` this.showQRCodeBinding = ${this.showQRCodeBinding}`)
+          this.showQRCodeBinding = true;
         }
         return Promise.reject(res);
       })
@@ -186,6 +193,14 @@ export default {
     },
     closeBuyAgain() {
       this.rebuy = false;
+    },
+    beforeClose(action, done) {
+      console.log({action, done})
+      if (action === 'confirm') {
+        setTimeout(done, 1000);
+      } else {
+        done();
+      }
     }
   }
 };

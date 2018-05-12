@@ -19,7 +19,8 @@ export default {
   mounted() {
     Toast.clear();
     const params = {
-      qrCodeId: this.qrCodeId
+      qrCodeId: this.qrCodeId,
+      userId: this.userId
     };
     this.$apis.address.getAddrs(params).then(res => {
       this.addrs = res.addrInfo;
@@ -34,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["qrCodeId"]),
+    ...mapGetters(["qrCodeId","userId"]),
     lists() {
       let lists = [];
       if (this.addrs && this.addrs.length > 0) {

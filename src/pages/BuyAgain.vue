@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["commonPopup", "cartItems", "qrCodeId"]),
+    ...mapGetters(["commonPopup", "cartItems", "qrCodeId", "userId"]),
     totalPrice() {
       const { gCount = 1, gDistPrice } = this.item;
       return gCount * gDistPrice;
@@ -58,7 +58,8 @@ export default {
       this.addItems();
       const params = {
         gIds: this.gIds,
-        qrCodeId: this.qrCodeId
+        qrCodeId: this.qrCodeId,
+        userId: this.userId
       };
       this.$apis.order.getPreInfo(params).then(res => {
         console.log("addrInfo", res.addrInfo);

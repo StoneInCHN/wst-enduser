@@ -73,7 +73,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["qrCodeId"]),
+    ...mapGetters(["qrCodeId", "userId"]),
     items() {
       return this.cartItems.filter(item => item.count > 0);
     },
@@ -113,14 +113,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setDefaultAddress"]),
+    ...mapActions(["setDefaultAddress", "setCartItems"]),
     buy() {
       const params = {
         gIds: this.gIds,
-        qrCodeId: this.qrCodeId
+        qrCodeId: this.qrCodeId,
+        userId: this.userId
       };
       this.$apis.order.getPreInfo(params).then(res => {
-        console.log("addrInfo", res.addrInfo);
         this.setDefaultAddress(res.addrInfo);
         this.$router.push("/order");
       });
@@ -134,7 +134,8 @@ export default {
         message: "确认要清空购物车吗?"
       })
         .then(() => {
-          this.$store.dispatch("setCartItems", { cartItems: [] });
+          //this.$store.dispatch("setCartItems", { cartItems: [] });
+          this.setCartItems([])
         })
         .catch(() => {});
     },
