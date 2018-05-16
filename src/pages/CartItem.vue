@@ -80,11 +80,11 @@ export default {
         cartItems.forEach(item => {
           if (item.id === this.item.id) {
             if ("add" === type) {
-              ++item.count;
+              item.count = item.count + 1;
               flag = true;
               resultItems.push(item);
             } else if ("minus" === type) {
-              --item.count;
+              item.count = item.count - 1;
               if (item.count > 0) {
                 resultItems.push(item);
               }

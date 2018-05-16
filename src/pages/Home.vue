@@ -125,7 +125,7 @@ export default {
         const qrCodeId = this.qrCodeId;
         //获取当前店铺的商品列表
         return this.$apis.home.getWGList({
-          entityId: 1,
+          entityId: this.userId,
           qrCodeId
         });
       })

@@ -11,7 +11,7 @@
 	</li>
 </template>
 <script>
-import { numMul } from "../utils";
+import { numMul , urlPre} from "../utils";
 export default {
   name: "OrderDetailsItem",
   props: {
@@ -34,7 +34,7 @@ export default {
       let style = {};
       if (this.item.picUrl) {
         style = {
-          backgroundImage: `url(${this.item.picUrl})`
+          backgroundImage: `url(${urlPre(this.item.picUrl)})`
         };
       }
       return style;

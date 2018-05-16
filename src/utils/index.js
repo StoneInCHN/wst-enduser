@@ -118,5 +118,5 @@ function padLeftZero(str) {
 
 export function urlPre(url) {
   const pre = "http://47.106.96.230:10001/wst-customer";
-  return `${pre}/${url}`;
+  return `${pre}${url}`;
 }

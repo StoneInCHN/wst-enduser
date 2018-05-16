@@ -73,7 +73,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["qrCodeId", "userId"]),
+    ...mapGetters(["qrCodeId", "userId" , "shopInfo"]),
     items() {
       return this.cartItems.filter(item => item.count > 0);
     },
@@ -115,6 +115,8 @@ export default {
   methods: {
     ...mapActions(["setDefaultAddress", "setCartItems"]),
     buy() {
+      console.log(this.shopInfo)
+      
       const params = {
         gIds: this.gIds,
         qrCodeId: this.qrCodeId,
@@ -124,6 +126,7 @@ export default {
         this.setDefaultAddress(res.addrInfo);
         this.$router.push("/order");
       });
+      
     },
     toggleDetails() {
       this.showDetails = !this.showDetails;
