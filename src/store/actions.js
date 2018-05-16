@@ -28,6 +28,9 @@ const actions = {
   setUserId({ commit }, userId) {
     commit(types.COM_SET_USER_ID, userId);
   },
+  setEntityId({ commit }, entityId) {
+    commit(types.COM_SET_ENTITY_ID, entityId);
+  },
   setOrderNotice({ commit }, orderNotice) {
     commit(types.COM_SET_ORDER_NOTICE, orderNotice);
   },

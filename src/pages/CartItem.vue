@@ -5,7 +5,7 @@
 			<van-col span="12" >
 				<div class="warp">
 					<Stepper 
-            v-model="item.count" 
+            v-model="count" 
             :min="0" 
             :default-value="0"
             disable-input  
@@ -80,11 +80,11 @@ export default {
         cartItems.forEach(item => {
           if (item.id === this.item.id) {
             if ("add" === type) {
-              item.count = item.count + 1;
+              ++item.count ;
               flag = true;
               resultItems.push(item);
             } else if ("minus" === type) {
-              item.count = item.count - 1;
+              --item.count ;
               if (item.count > 0) {
                 resultItems.push(item);
               }

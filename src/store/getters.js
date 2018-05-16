@@ -2,6 +2,7 @@ const getters = {
   token: state => state.token,
   key: state => state.key,
   userId: state => state.userId,
+  entityId: state => state.entityId,
   noticeFlag: state => state.noticeFlag,
   count: state => state.count,
   name: state => state.name,

@@ -70,9 +70,9 @@ export default {
     BuyAgain
   },
   mounted() {
-    const qrCodeId =location.hash.split("#/?id=")[1]
-    if(!qrCodeId){
-      Toast("无效参数")
+    const qrCodeId = location.hash.split("#/?id=")[1];
+    if (!qrCodeId) {
+      Toast("无效参数");
     }
     this.setQrCodeId(qrCodeId);
     this.$apis.common
@@ -81,20 +81,23 @@ export default {
         const _CODE = "0000";
         if (res.code == "0000") {
           this.setToken(res.msg.token);
-          this.setUserId(res.msg.seriUserId)
-          return this.$apis.home.getHpInfo({ qrCodeId: this.qrCodeId, userId: this.userId });
+          this.setUserId(res.msg.seriUserId);
+          return this.$apis.home.getHpInfo({
+            qrCodeId: this.qrCodeId,
+            userId: this.userId
+          });
         } else if (res.code == "1000") {
           Toast.fail(res.desc);
         } else if (res.code == "1001") {
           //未绑定
           Toast.fail(res.desc);
-          console.log(` this.showQRCodeBinding = ${this.showQRCodeBinding}`)
-          this.showQRCodeBinding = true;
+          
         }
         return Promise.reject(res);
       })
       .then(res => {
         //无成功或处理中的订单  - 无弹出页面
+        console.log("11111")
         const {
           bussBeginTime,
           bussEndTime,
@@ -112,20 +115,21 @@ export default {
           notice,
           shopName
         };
-        this.setShopInfo(shop)
+        this.setShopInfo(shop);
+        this.setEntityId(id);
         if (this.noticeFlag && res.flag === 1) {
           this.setOrderNotice(true);
           this.setNoticeOrders(res.orderInfo);
-          this.setNoticeFlag(false)
+          this.setNoticeFlag(false);
         } else if (this.noticeFlag && res.flag === 2) {
           this.rebuy = true;
           this.wgInfo = res.wgInfo;
-          this.setNoticeFlag(false)
+          this.setNoticeFlag(false);
         }
         const qrCodeId = this.qrCodeId;
         //获取当前店铺的商品列表
         return this.$apis.home.getWGList({
-          entityId: this.userId,
+          entityId: this.entityId,
           qrCodeId
         });
       })
@@ -149,7 +153,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userId", "qrCodeId", "orderNotice", "shopInfo", "noticeFlag"]),
+    ...mapGetters([
+      "userId",
+      "entityId",
+      "qrCodeId",
+      "orderNotice",
+      "shopInfo",
+      "noticeFlag"
+    ]),
     brands() {
       let brands = [];
       if (this.gList.length > 0) {
@@ -168,6 +179,7 @@ export default {
     ...mapActions([
       "setToken",
       "setUserId",
+      "setEntityId",
       "setQrCodeId",
       "setOrderNotice",
       "setNoticeOrders",
@@ -195,8 +207,8 @@ export default {
       this.rebuy = false;
     },
     beforeClose(action, done) {
-      console.log({action, done})
-      if (action === 'confirm') {
+      console.log({ action, done });
+      if (action === "confirm") {
         setTimeout(done, 1000);
       } else {
         done();

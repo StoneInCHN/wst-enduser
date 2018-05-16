@@ -35,6 +35,10 @@ const mutations = {
     state.userId = userId;
     sessionStorage.setItem("userId", userId);
   },
+  [types.COM_SET_ENTITY_ID](state, entityId) {
+    state.entityId = entityId;
+    sessionStorage.setItem("entityId", entityId);
+  },
   [types.COM_SET_ORDER_NOTICE](state, orderNotice) {
     state.orderNotice = orderNotice;
   },
