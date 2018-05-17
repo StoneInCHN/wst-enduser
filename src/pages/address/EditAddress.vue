@@ -15,8 +15,8 @@
   </div>
 </template>
 <script>
-import { Field, CellGroup, Button } from "vant";
-import { mapGetters } from "vuex";
+import { Field, CellGroup, Button, Toast } from "vant";
+import { mapGetters, mapActions } from "vuex";
 
 const errorMsg = {
   contactName: "用户名不能为空",
@@ -30,7 +30,8 @@ export default {
   components: {
     Field,
     CellGroup,
-    Button
+    Button,
+    Toast
   },
   data() {
     return {
@@ -62,8 +63,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["setAddressLists"]),
     showError(key) {
-      console.log(this.user[key]);
+      console.log(`${key} => ${this.user[key]}`);
       if (!this.user[key]) {
         this.errorMsgshow[key] = errorMsg[key];
         return true;
@@ -73,9 +75,6 @@ export default {
       }
     },
     save() {
-      console.log(this.user);
-      //this.user.userId = this.userId;
-      //this.user.qrCodeId = this.qrCodeId;
       let validate = false;
       ["contactName", "contactPhone", "addr", "doorNum"].forEach(item => {
         const flag = this.showError(item);
@@ -85,14 +84,37 @@ export default {
       });
       console.log({ validate });
       if (!validate) {
-      let lists = []
-      this.addressLists.forEach(addr => {
-        if (addr.id === this.user.id) {
-          addr = this.user;
-        } 
-        lists.push(addr)
-      });
-        this.$router.push("listAddress");
+        const {id, contactName, contactPhone, addr, doorNum} = this.user
+
+        const params = {
+          qrCodeId: this.qrCodeId,
+          userId: this.userId,
+          entityId: id,
+          contactName,
+          contactPhone,
+          addr,
+          doorNum
+        }
+        console.log({params})
+        this.$apis.address.newAddr(params).then(r => {
+          console.log({ r });
+          if (r && r.code === "0000") {
+            Toast(r.desc);
+            setTimeout(() => {
+              let lists = [];
+              this.addressLists.forEach(addr => {
+                if (addr.id === this.user.id) {
+                  addr = this.user;
+                }
+                lists.push(addr);
+              });
+              this.setAddressLists(lists)
+              this.$router.push("listAddress");
+            }, 500);
+          } else {
+            Toast.fail(r.desc);
+          }
+        });
       }
     }
   }

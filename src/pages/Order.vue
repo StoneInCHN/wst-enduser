@@ -100,11 +100,11 @@ export default {
     },
     count: {
       get() {
-        console.log("count ", this.cartItems);
+        console.log("cartItems", this.cartItems);
         let count = 0;
         if (this.cartItems && this.cartItems.length > 0) {
           this.cartItems.forEach(item => {
-            count = item.count;
+            count += item.count;
           });
         }
         return count;
@@ -115,7 +115,7 @@ export default {
       let price = 0;
       if (this.cartItems && this.cartItems.length > 0) {
         this.cartItems.forEach(item => {
-          let total = numMul(item.originPrice, item.count);
+          let total = numMul(item.distPrice, item.count);
           price = numAdd(price, total);
         });
       }

@@ -67,7 +67,6 @@ export default {
       this.$router.push("addAddress");
     },
     onEdit(item, index) {
-      Toast("编辑收货地址:" + index);
       this.$router.push({
         path: "editAddress",
         query: {
@@ -76,7 +75,6 @@ export default {
       });
     },
     select(item, index) {
-      console.log({ item, index });
       this.chosenAddressId = item.id;
       let defaultAddr = {};
       let lists = []

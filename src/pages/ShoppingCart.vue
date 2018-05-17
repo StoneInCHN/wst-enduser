@@ -8,7 +8,7 @@
 		  	</div>
 		  	<div class="cart-price">
 		  		<span>￥{{totalPrice}}</span>
-		  		<span v-if="showDiscount" class="discount">￥14.00</span>
+		  		<span v-if="showDiscount" class="discount">￥{{originTotalPrice}}</span>
 		  	</div>
 		  </van-col>
 		  <van-col span="9">
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       showDetails: false,
-      showDiscount: false,
+      showDiscount: true,
       balls: [
         { show: false },
         { show: false },
@@ -90,6 +90,16 @@ export default {
       return this.totalCount === 0;
     },
     totalPrice() {
+      let price = 0;
+      if (this.cartItems && this.cartItems.length > 0) {
+        this.cartItems.forEach(item => {
+          let total = numMul(item.distPrice, item.count);
+          price = numAdd(price, total);
+        });
+      }
+      return price;
+    },
+    originTotalPrice(){
       let price = 0;
       if (this.cartItems && this.cartItems.length > 0) {
         this.cartItems.forEach(item => {

@@ -14,7 +14,8 @@
         @plus="add"
         @minus="minus"
       />
-			<span>￥{{goods.originPrice}}</span>
+			<span>￥{{goods.distPrice}}</span>
+      <span class="originPrice">￥{{goods.originPrice}}</span>
 		</div>
 	</li>
 </template>
@@ -30,23 +31,21 @@ export default {
   },
   props: ["goods", "dropBall"],
   computed: {
-    ...mapGetters([
-      "cartItems"
-    ]),
-    imgStyle(){
-      let style = {}
-      if(this.goods.picUrl){
-        style ={
+    ...mapGetters(["cartItems"]),
+    imgStyle() {
+      let style = {};
+      if (this.goods.picUrl) {
+        style = {
           backgroundImage: `url(${urlPre(this.goods.picUrl)})`
-        }
+        };
       }
       return style;
     },
     hasValue() {
       return !(this.count > 0);
     },
-    fullName(){
-      return `${this.goods.gName} (${this.goods.gSpec})`
+    fullName() {
+      return `${this.goods.gName} (${this.goods.gSpec})`;
     },
     count: {
       get() {
@@ -129,13 +128,13 @@ export default {
     top: 0;
     background-color: #f3f3f3;
   }
-  .goods-img{
+  .goods-img {
     width: 74px;
     height: 74px;
     position: absolute;
     left: 0;
     top: 0;
-    background: #f3f3f3 url("../assets/images/water.svg") no-repeat center ;
+    background: #f3f3f3 url("../assets/images/water.svg") no-repeat center;
     background-size: cover;
   }
   .title {
@@ -152,6 +151,13 @@ export default {
     padding-left: 10px;
     span {
       color: #e64242;
+    }
+    .originPrice {
+      font-size: 10px;
+      margin-left: 10px;
+      text-decoration: line-through;
+      color: #7c7c7c;
+      font-size: 12px;
     }
     .van-stepper {
       float: right;
