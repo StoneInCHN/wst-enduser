@@ -30,7 +30,7 @@
       <BuyAgain slot="content" :item="wgInfo" :close="closeBuyAgain"/>
     </WstPopup>
     <Dialog 
-      v-show="showQRCodeBinding" 
+      v-if="showQRCodeBinding" 
       show-cancel-button
       :before-close="beforeClose"
       >
@@ -82,10 +82,13 @@ export default {
         if (res.code == "0000") {
           this.setToken(res.msg.token);
           this.setUserId(res.msg.seriUserId);
+          //this.showQRCodeBinding = true
+           
           return this.$apis.home.getHpInfo({
             qrCodeId: this.qrCodeId,
             userId: this.userId
           });
+          
         } else if (res.code == "1000") {
           Toast.fail(res.desc);
         } else if (res.code == "1001") {

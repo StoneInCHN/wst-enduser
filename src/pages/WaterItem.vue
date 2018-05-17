@@ -167,28 +167,28 @@ export default {
         border-color: #fff;
         background-color: #fff;
       }
-    }
-    .van-stepper__stepper {
-      width: 20px;
-      height: 20px;
-      background-color: #00a0e9;
-      border-radius: 20px;
-    }
-    .van-stepper__stepper::after,
-    .van-stepper__stepper::before {
-      background-color: #fff;
-    }
-    .van-stepper__stepper::before {
-      height: 2px;
-    }
-    .van-stepper__stepper::after {
-      width: 2px;
-    }
-    .van-stepper__input {
-      background-color: #fff;
-      border: none;
-      width: 26px;
-    }
+      button{
+        width: 20px;
+        height: 20px;
+        background-color: #00a0e9;
+        border-radius: 20px;
+      }
+      button::after,
+      button::before {
+        background-color: #fff;
+      }
+      button::before {
+        height: 2px;
+      }
+      button::after {
+        width: 2px;
+      }
+      .van-stepper__input {
+        background-color: #fff;
+        border: none;
+        width: 26px;
+      }
+    }    
     .hasValue {
       .van-stepper__input {
         color: #fff;
