@@ -168,7 +168,7 @@ export default {
         this.setSuccessOrder(r)
         this.setCartItems([])
         setTimeout(()=>{
-          this.$router.push("/orderSuccess");
+          this.$router.replace("/orderSuccess");
         },500)
       });
     }

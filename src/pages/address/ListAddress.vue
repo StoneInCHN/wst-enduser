@@ -87,10 +87,9 @@ export default {
         }
         lists.push(addr)
       });
-      console.log({ defaultAddr, lists });
       this.setAddressLists(lists)
       this.setDefaultAddress(defaultAddr)
-      this.$router.push("/order");
+      this.$router.go(-1)
     }
   }
 };

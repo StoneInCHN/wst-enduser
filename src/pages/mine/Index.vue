@@ -3,9 +3,7 @@
     <Header/>
     <CellGroup>
         <Cell title="我的订单" label="查看订单信息" is-link @click="showOrder"/>
-        <!--
         <Cell title="我的地址"  label="收货地址管理" is-link @click="showAddr"/>
-        -->
     </CellGroup>
   </div>
 </template>
