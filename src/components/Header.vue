@@ -3,8 +3,8 @@
 		<Button  :disabled="isCall" class="header-phone" @click="call">
 			<Icon name="phone"/>
 		</Button>
-		<p>{{shopInfo.shopName || ""}}</p>
-		<p>{{`${shopInfo.bussBeginTime || ""} -- ${shopInfo.bussEndTime || ""}`}}</p>
+		<p>{{ shopInfo.shopName || ""}}</p>
+		<p>{{`营业时间 ${shopInfo.bussBeginTime || ""} -- ${shopInfo.bussEndTime || ""}`}}</p>  
 	</div>
 </template>
 <script>

@@ -1,7 +1,11 @@
 <template>
 	<div class="goods-warp">
 		<Header/>
-		<div class="water-conent">
+    <NoticeBar 
+      v-show="showShopNotice" 
+      :text="shopInfo.notice"
+    />
+		<div class="water-conent" :style="contentStyle">
 			<div class="sideBar">
 				<BadgeGroup  :active-key="activeKey">
 					<Badge 
@@ -44,7 +48,15 @@
 </template>
 <script>
 import vue from "vue";
-import { BadgeGroup, Badge, Button, Dialog, Field, Toast } from "vant";
+import {
+  BadgeGroup,
+  Badge,
+  Button,
+  Dialog,
+  Field,
+  Toast,
+  NoticeBar
+} from "vant";
 import WaterItem from "./WaterItem";
 import ShoppingCart from "./ShoppingCart";
 import Header from "@/components/Header";
@@ -67,7 +79,8 @@ export default {
     Field,
     Toast,
     WstPopup,
-    BuyAgain
+    BuyAgain,
+    NoticeBar
   },
   mounted() {
     const qrCodeId = location.hash.split("#/?id=")[1];
@@ -83,24 +96,22 @@ export default {
           this.setToken(res.msg.token);
           this.setUserId(res.msg.seriUserId);
           //this.showQRCodeBinding = true
-           
+
           return this.$apis.home.getHpInfo({
             qrCodeId: this.qrCodeId,
             userId: this.userId
           });
-          
         } else if (res.code == "1000") {
           Toast.fail(res.desc);
         } else if (res.code == "1001") {
           //未绑定
           Toast.fail(res.desc);
-          
         }
         return Promise.reject(res);
       })
       .then(res => {
         //无成功或处理中的订单  - 无弹出页面
-        console.log("11111")
+        console.log("11111");
         const {
           bussBeginTime,
           bussEndTime,
@@ -162,7 +173,8 @@ export default {
       "qrCodeId",
       "orderNotice",
       "shopInfo",
-      "noticeFlag"
+      "noticeFlag",
+      "shopInfo"
     ]),
     brands() {
       let brands = [];
@@ -176,6 +188,15 @@ export default {
         });
       }
       return brands;
+    },
+    showShopNotice() {
+      return this.shopInfo.notice && this.shopInfo.notice.length > 0;
+    },
+    contentStyle() {
+      const paddingTop = this.showShopNotice ? "100px" : "64px";
+      const style = { paddingTop };
+      console.log({ style });
+      return style;
     }
   },
   methods: {
@@ -224,6 +245,13 @@ export default {
 .goods-warp {
   height: 100%;
   position: relative;
+  .van-notice-bar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
   .water-conent {
     position: relative;
     padding-top: 64px;
