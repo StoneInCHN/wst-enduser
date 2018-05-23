@@ -5,7 +5,7 @@ const common = {
     return post("/common/auth", params);
   },
   bindUser(params) {
-    return lift(post("/common/bindUser", params));
+    return post("/common/bindUser", params);
   }
 };
 

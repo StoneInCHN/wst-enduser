@@ -102,6 +102,28 @@ export default {
       })
         .then(() => {
           // on confirm
+          const params ={
+            qrCodeId: this.qrCodeId,
+            userId: this.userId,
+            entityId: this.user.id,
+          }
+          this.$apis.address.delAddr(params).then(r=>{
+              if (r && r.code === "0000") {
+                Toast(r.desc);
+                setTimeout(() => {
+                  let lists = [];
+                  this.addressLists.forEach(addr => {
+                    if (addr.id !== this.user.id) {
+                      lists.push(addr);
+                    }
+                  });
+                  this.setAddressLists(lists);
+                  this.$router.go(-1);
+                }, 500);
+              }else{
+                Toast.fail(r.desc);
+              }
+          })
         })
         .catch(() => {
           // on cancel

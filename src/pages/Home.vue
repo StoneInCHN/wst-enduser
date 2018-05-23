@@ -33,12 +33,12 @@
     <WstPopup v-if="rebuy">
       <BuyAgain slot="content" :item="wgInfo" :close="closeBuyAgain"/>
     </WstPopup>
-    <van-dialog
+    <Popup
       v-model="showQRCodeBinding"
-      title="请先绑定用户编号"
-      :before-close="beforeClose"
-      :confirm="onConfirm"
+      :close-on-click-overlay="false"
+      class="binding-popup"
     >
+      <h4>绑定用户编号</h4>
       <Field
         v-model="userNo"
         label="用户编号"
@@ -47,7 +47,8 @@
         @blur="checkUserNo"
         :error-message="errorMsgshow.userNo"
       />
-    </van-dialog>
+      <Button size="large" :loading="bindLoading" @click="onConfirm">确定</Button>
+    </Popup>
 	</div>
 </template>
 <script>
@@ -56,10 +57,11 @@ import {
   BadgeGroup,
   Badge,
   Button,
-  Dialog,
+  Popup,
   Field,
   Toast,
-  NoticeBar
+  NoticeBar,
+  Dialog
 } from "vant";
 import WaterItem from "./WaterItem";
 import ShoppingCart from "./ShoppingCart";
@@ -69,8 +71,6 @@ import WstPopup from "@/components/WstPopup";
 import BuyAgain from "./BuyAgain";
 import { mapActions, mapGetters } from "vuex";
 import validate from "../utils/validate";
-
-vue.use(Dialog);
 
 export default {
   name: "BuyWater",
@@ -82,94 +82,16 @@ export default {
     WaterItem,
     ShoppingCart,
     OrderPopup,
-    Dialog,
+    Popup,
     Field,
     Toast,
     WstPopup,
     BuyAgain,
-    NoticeBar
+    NoticeBar,
+    Dialog
   },
   mounted() {
-    const qrCodeId = location.hash.split("#/?id=")[1];
-    if (!qrCodeId) {
-      Toast("无效参数");
-    }
-    this.setQrCodeId(qrCodeId);
-    this.$apis.common
-      .auth({ qrCodeId: this.qrCodeId })
-      .then(res => {
-        const _CODE = "0000";
-        if (res.code == "0000") {
-          this.setToken(res.msg.token);
-          this.setUserId(res.msg.seriUserId);
-          //this.showQRCodeBinding = true
-
-          return this.$apis.home.getHpInfo({
-            qrCodeId: this.qrCodeId,
-            userId: this.userId
-          });
-        } else if (res.code == "1000") {
-          Toast.fail(res.desc);
-        } else if (res.code == "1001") {
-          //未绑定
-          Toast.fail(res.desc);
-        }
-        return Promise.reject(res);
-      })
-      .then(res => {
-        //无成功或处理中的订单  - 无弹出页面
-        const {
-          bussBeginTime,
-          bussEndTime,
-          id,
-          mobilePhoneNum,
-          notice,
-          shopName
-        } = res;
-
-        const shop = {
-          bussBeginTime,
-          bussEndTime,
-          id,
-          mobilePhoneNum,
-          notice,
-          shopName
-        };
-        this.setShopInfo(shop);
-        this.setEntityId(id);
-        if (this.noticeFlag && res.flag === 1) {
-          this.setOrderNotice(true);
-          this.setNoticeOrders(res.orderInfo);
-          this.setNoticeFlag(false);
-        } else if (this.noticeFlag && res.flag === 2) {
-          this.rebuy = true;
-          this.wgInfo = res.wgInfo;
-          this.setNoticeFlag(false);
-        }
-        const qrCodeId = this.qrCodeId;
-        //获取当前店铺的商品列表
-        return this.$apis.home.getWGList({
-          entityId: this.entityId,
-          qrCodeId
-        });
-      })
-      .then(res => {
-        if(res.code === "0000"){
-          this.setIsOpen(true)
-        }else if(res.code === "1000"){
-          this.setIsOpen(false)
-          Dialog.alert({
-            message: res.desc
-          }).then(() => {
-            // on close
-          });
-        }
-        this.gList = res.msg.gList;
-        this.items = this.gList[0].gInfo;
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    this.initData()
   },
   data() {
     return {
@@ -180,10 +102,11 @@ export default {
       items: [],
       itemsBuy: [],
       showQRCodeBinding: false,
-      userNo:"",
-      errorMsgshow:{
-        userNo:""
-      }
+      userNo: "",
+      errorMsgshow: {
+        userNo: ""
+      },
+      bindLoading: false
     };
   },
   computed: {
@@ -215,7 +138,7 @@ export default {
     },
     contentStyle() {
       const paddingTop = this.showShopNotice ? "100px" : "64px";
-      return { paddingTop }
+      return { paddingTop };
     },
     checkRules() {
       return [
@@ -259,38 +182,31 @@ export default {
     closeBuyAgain() {
       this.rebuy = false;
     },
-    onConfirm(){
+    onConfirm() {
       const result = validate.checkAll(this.checkRules);
-        if (result) {
-          result.forEach(item => {
-            this.errorMsgshow[item.alias] = item.msg;
-          });
-        } else {
-          const userNo = this.userNo
-          console.log({userNo})
-          console.log("confirm")
-        }
-    },
-    onClose(){
-      console.log("on close")
-    },
-    beforeClose(action, done) {
-      console.log({ action, done });
-      if (action === "confirm") {
-        //setTimeout(done, 1000); 
-        const result = validate.checkAll(this.checkRules);
-        if (result) {
-          result.forEach(item => {
-            this.errorMsgshow[item.alias] = item.msg;
-          });
-        } else {
-          const userNo = this.userNo
-          console.log({userNo})
-          console.log("confirm")
-        }
-        return false
+      if (result) {
+        result.forEach(item => {
+          this.errorMsgshow[item.alias] = item.msg;
+        });
       } else {
-        done();
+        this.bindLoading = true;
+        const userNum = this.userNo;
+        this.$apis.common
+          .bindUser({
+            qrCodeId: this.qrCodeId,
+            userNum
+          })
+          .then(r => {
+            if (r && r.code === "0000") {
+              Toast("绑定成功");
+              this.bindLoading = false;
+              this.showQRCodeBinding = false;
+              this.initData()
+            } else {
+              Toast.fail(r.desc);
+              this.bindLoading = false;
+            }
+          });
       }
     },
     checkUserNo() {
@@ -301,6 +217,87 @@ export default {
       );
       this.errorMsgshow.userNo = result ? result : "";
     },
+    initData() {
+      const qrCodeId = location.hash.split("#/?id=")[1];
+      if (!qrCodeId) {
+        Toast("无效参数");
+      }
+      this.setQrCodeId(qrCodeId);
+      this.$apis.common
+        .auth({ qrCodeId: this.qrCodeId })
+        .then(res => {
+          const _CODE = "0000";
+          if (res.code == "0000") {
+            this.setToken(res.msg.token);
+            this.setUserId(res.msg.seriUserId);
+            return this.$apis.home.getHpInfo({
+              qrCodeId: this.qrCodeId,
+              userId: this.userId
+            });
+          } else if (res.code == "1000") {
+            Toast.fail(res.desc);
+          } else if (res.code == "1001") {
+            //未绑定
+            //Toast.fail(res.desc);
+            this.showQRCodeBinding = true;
+          }
+          return Promise.reject(res);
+        })
+        .then(res => {
+          //无成功或处理中的订单  - 无弹出页面
+          const {
+            bussBeginTime,
+            bussEndTime,
+            id,
+            mobilePhoneNum,
+            notice,
+            shopName
+          } = res;
+
+          const shop = {
+            bussBeginTime,
+            bussEndTime,
+            id,
+            mobilePhoneNum,
+            notice,
+            shopName
+          };
+          this.setShopInfo(shop);
+          this.setEntityId(id);
+          if (this.noticeFlag && res.flag === 1) {
+            this.setOrderNotice(true);
+            this.setNoticeOrders(res.orderInfo);
+            this.setNoticeFlag(false);
+          } else if (this.noticeFlag && res.flag === 2) {
+            this.rebuy = true;
+            this.wgInfo = res.wgInfo;
+            this.setNoticeFlag(false);
+          }
+          const qrCodeId = this.qrCodeId;
+          //获取当前店铺的商品列表
+          return this.$apis.home.getWGList({
+            entityId: this.entityId,
+            qrCodeId
+          });
+        })
+        .then(res => {
+          if (res.code === "0000") {
+            this.setIsOpen(true);
+          } else if (res.code === "1000") {
+            this.setIsOpen(false);
+            Dialog.alert({
+              message: res.desc
+            }).then(() => {
+              // on close
+            });
+          }
+          this.gList = res.msg.gList;
+          this.items = this.gList[0].gInfo;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
   }
 };
 </script>
@@ -365,6 +362,20 @@ export default {
         to(#00d6e9)
       );
       background: linear-gradient(top center, #00a0e9, #00d6e9);
+    }
+  }
+  .binding-popup {
+    width: 80vw;
+    padding: 1rem;
+    box-sizing: border-box;
+    h4 {
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+    .van-button--default {
+      margin-top: 0.5rem;
+      background-color: #00a0e9;
+      color: #fff;
     }
   }
 }

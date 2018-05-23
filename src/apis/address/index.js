@@ -6,6 +6,9 @@ const address = {
   },
   newAddr(params) {
     return post("/endUser/newAddr", params);
+  },
+  delAddr(params) {
+    return post("/endUser/delAddr", params);
   }
 };
 
