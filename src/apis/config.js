@@ -19,7 +19,6 @@ axios.defaults.baseURL =  "http://47.106.96.230:10001/wst-customer/"
 axios.interceptors.request.use(
   config => {
     const { token } = store.state;
-    console.log({ store });
     Toast.loading({
       mask: true,
       message: '加载中...',

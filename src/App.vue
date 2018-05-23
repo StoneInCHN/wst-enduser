@@ -19,4 +19,7 @@ button.van-dialog__confirm,
 button.van-dialog__confirm:active {
   color: #00a0e9;
 }
+.van-dialog__message{
+  text-align: center;
+}
 </style>

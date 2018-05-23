@@ -16,6 +16,7 @@ const state = {
   noticeFlag: getBooleanItem("noticeFlag"),
   orderNotice: false,
   commonPopup: true,
+  isOpen: getBooleanItem("noticeFlag"), //是否是营业中
   token: sessionStorage.getItem("token") || "",
   count: 0,
   resultNum: 0,

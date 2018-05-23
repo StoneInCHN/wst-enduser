@@ -62,6 +62,10 @@ const mutations = {
   [types.COM_SET_NOTICE_FLAG](state, noticeFlag) {
     save(state, "noticeFlag", noticeFlag)
     sessionStorage.setItem("noticeFlag", noticeFlag);
+  },
+  [types.COM_SET_IS_OPEN](state, isOpen) {
+    save(state, "isOpen", isOpen)
+    sessionStorage.setItem("isOpen", isOpen);
   }
 };
 

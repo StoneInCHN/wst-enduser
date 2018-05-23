@@ -24,14 +24,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["shopInfo"]),
+    ...mapGetters(["shopInfo", "isOpen"]),
     isCall() {
       return false;
     }
   },
   methods: {
     call() {
-      Toast("店家已经休息了");
+      if(this.isOpen){
+        location.href = `tel:${this.shopInfo.mobilePhoneNum}`
+      }else{
+        Toast("店家已经打烊了");
+      }
+      
     }
   }
 };

@@ -41,7 +41,7 @@
       </section>
 		</div>
 		<div class="order-footer">
-			<Button size="large" @click="submitHandler">提交订单</Button>
+			<Button size="large" :disabled="!isOpen" @click="submitHandler">提交订单</Button>
 		</div>
 	</div>
 </template>
@@ -94,7 +94,7 @@ export default {
     console.log("defaultAddress", this.defaultAddress);
   },
   computed: {
-    ...mapGetters(["cartItems", "defaultAddress", "userId", "qrCodeId"]),
+    ...mapGetters(["cartItems", "defaultAddress", "userId", "qrCodeId","entityId", "isOpen"]),
     hasDefaultAddress() {
       return !!this.defaultAddress;
     },
@@ -154,7 +154,8 @@ export default {
         addrId: this.addrId,
         userId: this.userId,
         payType: "COB",
-        gIds: this.gIds
+        gIds: this.gIds,
+        entityId: this.entityId
       };
       console.log({ params });
       this.$apis.order.createSO(params).then(r => {
@@ -253,6 +254,11 @@ export default {
     button {
       background-color: #00a0e9;
       color: #fff;
+    }
+    .van-button--disabled {
+      color: #999;
+      background-color: #eee;
+      border: 1px solid #e5e5e5;
     }
   }
 }

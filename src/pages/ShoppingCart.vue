@@ -12,7 +12,7 @@
 		  	</div>
 		  </van-col>
 		  <van-col span="9">
-		    <Button type="default" :disabled="disabled" size="large" @click="buy">购买</Button>
+		    <Button type="default" :disabled="!canBuy" size="large" @click="buy">购买</Button>
 		  </van-col>
 		</Row>
 		<transition name="fade">
@@ -73,7 +73,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["qrCodeId", "userId" , "shopInfo"]),
+    ...mapGetters(["qrCodeId", "userId" , "shopInfo", "isOpen"]),
     items() {
       return this.cartItems.filter(item => item.count > 0);
     },
@@ -112,6 +112,9 @@ export default {
     cartItems() {
       return this.$store.state.cartItems;
     },
+    canBuy(){
+      return this.isOpen && this.cartItems.length > 0 
+    },
     gIds() {
       let gIds = {};
       if (this.items && this.items.length > 0) {
@@ -125,8 +128,6 @@ export default {
   methods: {
     ...mapActions(["setDefaultAddress", "setCartItems"]),
     buy() {
-      console.log(this.shopInfo)
-      
       const params = {
         gIds: this.gIds,
         qrCodeId: this.qrCodeId,
@@ -226,6 +227,11 @@ export default {
     color: #fff;
     background-color: #00a0e9;
     border: 1px solid #00a0e9;
+  }
+  .van-button--disabled {
+    color: #999;
+    background-color: #eee;
+    border: 1px solid #e5e5e5;
   }
 
   .cart-left {

@@ -51,6 +51,9 @@ const actions = {
   },
   setNoticeFlag({ commit }, noticeFlag) {
     commit(types.COM_SET_NOTICE_FLAG, noticeFlag);
+  },
+  setIsOpen({ commit }, isOpen) {
+    commit(types.COM_SET_IS_OPEN, isOpen);
   }
 };
 

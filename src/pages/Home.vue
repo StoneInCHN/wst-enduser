@@ -33,17 +33,21 @@
     <WstPopup v-if="rebuy">
       <BuyAgain slot="content" :item="wgInfo" :close="closeBuyAgain"/>
     </WstPopup>
-    <Dialog 
-      v-if="showQRCodeBinding" 
-      show-cancel-button
+    <van-dialog
+      v-model="showQRCodeBinding"
+      title="请先绑定用户编号"
       :before-close="beforeClose"
-      >
+      :confirm="onConfirm"
+    >
       <Field
-        v-model="qrCodeId"
+        v-model="userNo"
         label="用户编号"
+        required
         placeholder="请输入用户编号"
+        @blur="checkUserNo"
+        :error-message="errorMsgshow.userNo"
       />
-    </Dialog>
+    </van-dialog>
 	</div>
 </template>
 <script>
@@ -64,6 +68,9 @@ import OrderPopup from "@/components/OrderPopup";
 import WstPopup from "@/components/WstPopup";
 import BuyAgain from "./BuyAgain";
 import { mapActions, mapGetters } from "vuex";
+import validate from "../utils/validate";
+
+vue.use(Dialog);
 
 export default {
   name: "BuyWater",
@@ -111,7 +118,6 @@ export default {
       })
       .then(res => {
         //无成功或处理中的订单  - 无弹出页面
-        console.log("11111");
         const {
           bussBeginTime,
           bussEndTime,
@@ -148,6 +154,16 @@ export default {
         });
       })
       .then(res => {
+        if(res.code === "0000"){
+          this.setIsOpen(true)
+        }else if(res.code === "1000"){
+          this.setIsOpen(false)
+          Dialog.alert({
+            message: res.desc
+          }).then(() => {
+            // on close
+          });
+        }
         this.gList = res.msg.gList;
         this.items = this.gList[0].gInfo;
       })
@@ -163,7 +179,11 @@ export default {
       wgInfo: {},
       items: [],
       itemsBuy: [],
-      showQRCodeBinding: false
+      showQRCodeBinding: false,
+      userNo:"",
+      errorMsgshow:{
+        userNo:""
+      }
     };
   },
   computed: {
@@ -174,7 +194,8 @@ export default {
       "orderNotice",
       "shopInfo",
       "noticeFlag",
-      "shopInfo"
+      "shopInfo",
+      "isOpen"
     ]),
     brands() {
       let brands = [];
@@ -194,9 +215,19 @@ export default {
     },
     contentStyle() {
       const paddingTop = this.showShopNotice ? "100px" : "64px";
-      const style = { paddingTop };
-      console.log({ style });
-      return style;
+      return { paddingTop }
+    },
+    checkRules() {
+      return [
+        {
+          el: this.userNo,
+          alias: "userNo",
+          rules: [
+            { rule: "isNoNull", msg: "用户编号不能为空" },
+            { rule: "isNumber", msg: "用户编号只能为数字" }
+          ]
+        }
+      ];
     }
   },
   methods: {
@@ -208,7 +239,8 @@ export default {
       "setOrderNotice",
       "setNoticeOrders",
       "setShopInfo",
-      "setNoticeFlag"
+      "setNoticeFlag",
+      "setIsOpen"
     ]),
     clickBrand(key) {
       this.activeKey = key;
@@ -224,20 +256,51 @@ export default {
     showNotice() {
       this.$refs.orderPopup.showNotice();
     },
-    onConfirm() {
-      console.log("绑定二维码");
-    },
     closeBuyAgain() {
       this.rebuy = false;
+    },
+    onConfirm(){
+      const result = validate.checkAll(this.checkRules);
+        if (result) {
+          result.forEach(item => {
+            this.errorMsgshow[item.alias] = item.msg;
+          });
+        } else {
+          const userNo = this.userNo
+          console.log({userNo})
+          console.log("confirm")
+        }
+    },
+    onClose(){
+      console.log("on close")
     },
     beforeClose(action, done) {
       console.log({ action, done });
       if (action === "confirm") {
-        setTimeout(done, 1000);
+        //setTimeout(done, 1000); 
+        const result = validate.checkAll(this.checkRules);
+        if (result) {
+          result.forEach(item => {
+            this.errorMsgshow[item.alias] = item.msg;
+          });
+        } else {
+          const userNo = this.userNo
+          console.log({userNo})
+          console.log("confirm")
+        }
+        return false
       } else {
         done();
       }
-    }
+    },
+    checkUserNo() {
+      const result = validate.check(
+        this.checkRules.filter(item => {
+          return item.alias === "userNo";
+        })
+      );
+      this.errorMsgshow.userNo = result ? result : "";
+    },
   }
 };
 </script>
