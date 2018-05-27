@@ -2,13 +2,13 @@
 	<div class="order">
     <div class="order-header">
       <Button v-if="!hasDefaultAddress" class="add-address-btn" size="small" @click="addAddress">+新增收货地址</Button>
-      <div class="order-address" v-if="hasDefaultAddress">
+      <div class="order-address" v-if="hasDefaultAddress" @click="selectAddress">
         <h6>{{ `${defaultAddress.addr || ""} ${defaultAddress.doorNum || ""}`}}</h6>
 				<p>
 					<span>{{defaultAddress.contactName}}</span>
 					<span>{{defaultAddress.contactPhone}}</span>
 				</p>
-				<Icon name="arrow" @click="selectAddress"/>
+				<Icon name="arrow" />
       </div>
     </div>
 		<div class="order-details-list">

@@ -188,10 +188,13 @@ export default {
         border: none;
         width: 26px;
       }
+      .van-stepper__input[disabled] {
+          color: #666;
+      }
     }    
     .hasValue {
       .van-stepper__input {
-        color: #fff;
+        color:#fff !important ;
       }
     }
   }

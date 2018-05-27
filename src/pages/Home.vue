@@ -147,7 +147,7 @@ export default {
           alias: "userNo",
           rules: [
             { rule: "isNoNull", msg: "用户编号不能为空" },
-            { rule: "isNumber", msg: "用户编号只能为数字" }
+            { rule: "notSpecialChat", msg: "用户编号只能为数字或字母" }
           ]
         }
       ];

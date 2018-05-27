@@ -55,6 +55,11 @@ const validate = (() => {
       if (typeof val !== "number" && isNaN(val)) {
         return msg;
       }
+    },
+    notSpecialChat(val, msg) {  
+      if (!/^[0-9a-zA-Z]*$/g.test(val)) {
+        return msg;
+      }
     }
   };
   return {
