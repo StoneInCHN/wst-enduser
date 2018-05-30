@@ -7,8 +7,8 @@
 		  		<span>{{totalCount}}</span>
 		  	</div>
 		  	<div class="cart-price">
-		  		<span>￥{{totalPrice}}</span>
-		  		<span v-if="showDiscount" class="discount">￥{{originTotalPrice}}</span>
+		  		<span>￥{{totalPrice | formatPrice}}</span>
+		  		<span v-if="showDiscount" class="discount">￥{{originTotalPrice | formatPrice}}</span>
 		  	</div>
 		  </van-col>
 		  <van-col span="9">
@@ -47,7 +47,7 @@
 import { mapActions, mapGetters } from "vuex";
 import { Button, Row, Col, Icon, Dialog } from "vant";
 import CartItem from "./CartItem";
-import { numAdd, numMul } from "../utils";
+import { numAdd, numMul, toDecimal2 } from "../utils";
 
 export default {
   name: "ShoppingCart",
@@ -210,6 +210,11 @@ export default {
         ball.show = false;
         el.style.display = "none"; //隐藏小球
       }
+    }
+  },
+  filters:{
+    formatPrice (val) {
+      return toDecimal2(val)
     }
   }
 };

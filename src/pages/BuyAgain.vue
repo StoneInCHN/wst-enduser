@@ -1,8 +1,8 @@
 <template>
   <div class="buy-again">
-      <p>你上次购买了{{item.gCount}}桶</p>
+      <p>你上次购买了</p>
       <h6>{{`${item.gName} X ${item.gCount} 价格:${totalPrice}`}}</h6>
-      <Button type="default" size="large" @click="buyAgain">再来一桶</Button>
+      <Button type="default" size="large" @click="buyAgain">再次购买</Button>
       <Button class="cancel" type="default" size="large" @click="change">换个口味</Button>
   </div>
 </template>
@@ -27,7 +27,6 @@ export default {
   },
   created() {
     const { item, close } = this;
-    console.log({ item, close });
     if (!item.gCount) {
       this.item.gCount = 1;
     }

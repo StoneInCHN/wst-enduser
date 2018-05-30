@@ -14,14 +14,14 @@
         @plus="add"
         @minus="minus"
       />
-			<span>￥{{goods.distPrice}}</span>
-      <span class="originPrice">￥{{goods.originPrice}}</span>
+			<span>￥{{goods.distPrice | formatPrice}}</span>
+      <span class="originPrice">￥{{goods.originPrice | formatPrice}}</span>
 		</div>
 	</li>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { numMul, urlPre } from "../utils";
+import { numMul, urlPre, toDecimal2 } from "../utils";
 import { Stepper } from "vant";
 
 export default {
@@ -110,6 +110,11 @@ export default {
       }
       this.setCartItems(resultItems);
     }
+  },
+  filters:{
+    formatPrice (val) {
+      return toDecimal2(val)
+    }
   }
 };
 </script>
@@ -140,6 +145,8 @@ export default {
   .title {
     height: 44px;
     padding-left: 10px;
+    display: flex;
+    align-items: center;
     p {
       font-size: 14px;
     }

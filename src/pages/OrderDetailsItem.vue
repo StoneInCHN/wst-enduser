@@ -2,16 +2,17 @@
 	<li class="order-details-list-item">
     <div class="item-img" :style="imgStyle"/>
 		<p>
-			{{fullName}} <span> X {{item.count}}</span>
+			<span>{{fullName}}</span>
+      <span> X {{item.count}}</span>
 		</p>
 		<div class="price">
-			<span>￥{{totalOriginPrice}}</span>
-			<span>￥{{totalDistPrice}}</span>
+			<span>￥{{totalDistPrice | formatPrice}}</span>
+      <span>￥{{totalOriginPrice | formatPrice}}</span>
 		</div>
 	</li>
 </template>
 <script>
-import { numMul , urlPre} from "../utils";
+import { numMul , urlPre, toDecimal2} from "../utils";
 export default {
   name: "OrderDetailsItem",
   props: {
@@ -39,6 +40,11 @@ export default {
       }
       return style;
     }
+  },
+  filters:{
+    formatPrice (val) {
+      return toDecimal2(val)
+    }
   }
 };
 </script>
@@ -64,21 +70,30 @@ export default {
     box-sizing: border-box;
     font-size: 13px;
     flex: 1;
+    padding-left: 20px;
+    span{
+      display: block;
+    }
   }
   .price {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-    width: 70px;
+    width: 150px;
     padding: 11px 0;
-    span:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span:last-child {
       text-decoration: line-through;
       font-size: 12px;
+      padding: 0 5px;
     }
-    span:last-child {
+    span:first-child {
       font-size: 15px;
       color: red;
+      padding: 0 5px;
     }
   }
 }

@@ -47,6 +47,7 @@
         @blur="checkUserNo"
         :error-message="errorMsgshow.userNo"
       />
+      <p>二维码下方就有用户编号哟! <span>没有?</span></p>
       <Button size="large" :loading="bindLoading" @click="onConfirm">确定</Button>
     </Popup>
 	</div>
@@ -376,6 +377,14 @@ export default {
       margin-top: 0.5rem;
       background-color: #00a0e9;
       color: #fff;
+    }
+    p{
+      padding: 10px 5px;
+      font-size: 14px;
+      color: darkorange;
+      span{
+        color: green;
+      }
     }
   }
 }

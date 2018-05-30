@@ -18,14 +18,14 @@
           <OrderItem v-for="item in cartItems" :item="item" :key="item.id"/>
         </ul>
         <div class="total-tips">
-          共<span>{{count}}</span>件商品，合计: <span>{{totalPrice}}</span>
+          共<span>{{count}}</span>件商品，合计: <span>{{totalPrice }}</span>
         </div>
       </section>
 			<section>
         <h6>订单信息</h6>
 			<CellGroup>
-			  	<Cell title="订单金额" :value="totalPrice" />
-			 	<Cell title="需要付款" :value="totalPrice" />
+			  	<Cell title="订单金额" :value="totalPrice " />
+			 	<Cell title="需要付款" :value="totalPrice " />
 			</CellGroup>
       </section>
 			<section>
@@ -46,7 +46,7 @@
 	</div>
 </template>
 <script>
-import { numAdd, numMul } from "../utils";
+import { numAdd, numMul, toDecimal2 } from "../utils";
 import { mapActions, mapGetters } from "vuex";
 import {
   Button,
@@ -119,7 +119,7 @@ export default {
           price = numAdd(price, total);
         });
       }
-      return `￥${price}`;
+      return `￥${toDecimal2(price)}`;
     },
     gIds() {
       let gIds = {};
@@ -172,6 +172,11 @@ export default {
           this.$router.replace("/orderSuccess");
         },500)
       });
+    }
+  },
+  filters:{
+    formatPrice (val) {
+      return toDecimal2(val)
     }
   }
 };

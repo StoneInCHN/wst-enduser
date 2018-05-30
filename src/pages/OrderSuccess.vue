@@ -5,13 +5,14 @@
       </p>
       <p class="msg">购买成功</p>
       <h4>您购买的商品马上送到</h4>
-      <p>货到后，你还需要支付 <span>￥{{successOrder.cobAmount}}</span></p>
+      <p>货到后，你还需要支付 <span>￥{{successOrder.cobAmount | formatPrice}}</span></p>
       <p class="desc">您可以再次扫描二维码关注订单状态</p>
   </div>
 </template>
 <script>
 import { Icon } from "vant";
 import { mapActions, mapGetters } from "vuex";
+import { toDecimal2 } from "../utils";
 export default {
   name: "OrderSuccess",
   components: {
@@ -19,6 +20,11 @@ export default {
   },
   computed: {
     ...mapGetters(["successOrder"])
+  },
+  filters:{
+    formatPrice (val) {
+      return toDecimal2(val)
+    }
   }
 };
 </script>

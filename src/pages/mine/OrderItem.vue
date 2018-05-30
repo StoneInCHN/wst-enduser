@@ -9,7 +9,7 @@
             <p>{{subItem.gName}}</p>
             <p class="price-info">
                 <span>X{{subItem.count}}</span>
-                <span class="price">{{subItem.count * subItem.amount}}</span>
+                <span class="price">{{subItem.count * subItem.amount | formatPrice}}</span>
             </p>
         </section>
         <!--
@@ -31,7 +31,7 @@
 import { Button, Dialog, Toast } from "vant";
 import { OrderStatusEnum } from "../../shared/consts";
 import { mapActions, mapGetters } from "vuex";
-import { formatDate } from "../../utils"
+import { formatDate, toDecimal2 } from "../../utils"
 export default {
   name: "OrderItem",
   components: {
@@ -87,7 +87,7 @@ export default {
         message: '催促中...'
       });
       setTimeout(()=>{
-        Toast("已催促商家!");
+        Toast("商家已收到催促，会尽快处理您的订单");
       },1000)
     }
   },
@@ -95,6 +95,9 @@ export default {
     formatDate (time) {
       let date = new Date(time)
       return formatDate(date, 'yyyy-MM-dd hh:mm')
+    },
+    formatPrice (val) {
+      return toDecimal2(val)
     }
   }
 };

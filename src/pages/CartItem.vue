@@ -1,10 +1,12 @@
 <template>
 	<li class="cart-item">
 		<Row>
-			<van-col span="12" >{{this.fullName}} </van-col>
-			<van-col span="12" >
+			<van-col span="8" >{{this.fullName}} </van-col>
+			<van-col span="16" >
 				<div class="warp">
-					<Stepper 
+					<span>￥{{totalPrice | formatPrice}}</span>
+          <span class="originPrice">￥{{totalOriginPrice | formatPrice}}</span>
+          <Stepper 
             v-model="count" 
             :min="0" 
             :default-value="0"
@@ -12,7 +14,6 @@
             @plus="add"
             @minus="minus"
           />
-					<span>￥{{totalPrice}}</span>
 				</div>
 			</van-col>
 		</Row>					
@@ -21,7 +22,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { Icon, Row, Col, Stepper } from "vant";
-import { numMul } from "../utils";
+import { numMul, toDecimal2 } from "../utils";
 
 export default {
   name: "CartItem",
@@ -37,6 +38,13 @@ export default {
       "cartItems"
     ]),
     totalPrice() {
+      if(this.item.count, this.item.distPrice){
+        return numMul(this.item.count, this.item.distPrice);
+      }else{
+        return 0
+      }
+    },
+    totalOriginPrice() {
       if(this.item.count, this.item.originPrice){
         return numMul(this.item.count, this.item.originPrice);
       }else{
@@ -108,6 +116,11 @@ export default {
       }
       this.setCartItems(resultItems);
     }
+  },
+  filters:{
+    formatPrice (val) {
+      return toDecimal2(val)
+    }
   }
 };
 </script>
@@ -118,16 +131,24 @@ export default {
     background-color: #fff;
     height: 40px;
     box-sizing: border-box;
+    font-size: 12px;
   .warp {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     span {
       color: #191919;
-      font-size: 15px;
+      font-size: 12px;
+    }
+    .originPrice {
+      font-size: 10px;
+      margin: 0 10px;
+      text-decoration: line-through;
+      color: #7c7c7c;
+      font-size: 12px;
     }
     .van-stepper {
-      float: right;
       width: 68px;
-      margin-right: 10px;
-
       button{
         width: 20px;
         height: 20px;
@@ -148,6 +169,9 @@ export default {
         background-color: #fff;
         border: none;
         width: 26px;
+      }
+      .van-stepper__input[disabled] {
+          color: #000;
       }
     }
   }

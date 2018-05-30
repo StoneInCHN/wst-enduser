@@ -58,10 +58,13 @@ export default {
       this.setOrderNotice(false);
     },
     notice() {
-      Toast({
-        duration: 1000,       // 持续展示 toast
-        message: '渴死了，老板快接单...'
-      })
+      Toast.loading({
+        mask: true,
+        message: '催促中...'
+      });
+      setTimeout(()=>{
+        Toast("商家已收到催促，会尽快处理您的订单");
+      },1000)
     },
     cancelOrder(id) {
       Dialog.confirm({

@@ -3,7 +3,7 @@
     <div class="title">联系人</div>
     <CellGroup>
       <Field v-model="user.contactName" required :error-message="errorMsgshow.contactName" label="用户名 :" placeholder="请填写收货人姓名" @blur="validateCheck('contactName')"/>
-      <Field v-model="user.contactPhone" required  :error-message="errorMsgshow.contactPhone" label="电话号码 :" placeholder="请填写收货人电话号码" @blur="validateCheck('contactPhone')"/>
+      <Field v-model="user.contactPhone" required  :error-message="errorMsgshow.contactPhone" label="电话号码 :" placeholder="请填写收货人手机号码" @blur="validateCheck('contactPhone')"/>
     </CellGroup>
     <div class="title">收货地址</div>
     <CellGroup>
