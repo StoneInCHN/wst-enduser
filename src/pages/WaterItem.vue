@@ -1,6 +1,6 @@
 <template>
 	<li class="goods-item">
-    <div class="goods-img" :style="imgStyle"></div>
+    <div class="goods-img" :style="imgStyle" @click="viewImg"></div>
 		<div class="title">
 			<p>{{fullName}}</p>
 		</div>
@@ -22,7 +22,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { numMul, urlPre, toDecimal2 } from "../utils";
-import { Stepper } from "vant";
+import { Stepper, ImagePreview } from "vant";
 
 export default {
   name: "WaterItem",
@@ -109,6 +109,12 @@ export default {
         resultItems.push(item);
       }
       this.setCartItems(resultItems);
+    },
+    viewImg(){
+      const url = urlPre(this.goods.largePicUrl)
+      ImagePreview([
+        url
+      ])
     }
   },
   filters:{

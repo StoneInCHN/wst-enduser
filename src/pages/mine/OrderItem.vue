@@ -4,14 +4,7 @@
             <span>{{item.createDate | formatDate}}</span>
             <span class="status">{{getStatic(item.oStatus)}}</span>
         </div> 
-        <section class="item-info" v-for="subItem in item.orderItems" :key="subItem.id">
-            <div class="item-img" :style="imgStyle"/>
-            <p>{{subItem.gName}}</p>
-            <p class="price-info">
-                <span>X{{subItem.count}}</span>
-                <span class="price">{{subItem.count * subItem.amount | formatPrice}}</span>
-            </p>
-        </section>
+        <SubItem  v-for="subItem in item.orderItems"  :item="subItem" :key="subItem.id" />
         <!--
         <div class="total-price">
             <span>总价: {{item.amount}}</span>
@@ -32,12 +25,14 @@ import { Button, Dialog, Toast } from "vant";
 import { OrderStatusEnum } from "../../shared/consts";
 import { mapActions, mapGetters } from "vuex";
 import { formatDate, toDecimal2 } from "../../utils"
+import SubItem from './SubItem'
 export default {
   name: "OrderItem",
   components: {
     Button,
     Dialog,
-    Toast
+    Toast,
+    SubItem
   },
   props: {
     item: {
@@ -46,16 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["qrCodeId", "historyOrders"]),
-    imgStyle(){
-      let style = {}
-      if(this.item.picUrl){
-        style ={
-          backgroundImage: `url(${this.item.picUrl})`
-        }
-      }
-      return style;
-    }
+    ...mapGetters(["qrCodeId", "historyOrders"])
   },
   methods: {
     ...mapActions(["setHistoryOrders"]),
