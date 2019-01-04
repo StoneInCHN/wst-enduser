@@ -55,10 +55,10 @@ export function fetch(url, params = {}) {
     axios
       .get(url, params)
       .then(data => {
-        return resolve(data);
+        resolve(data);
       })
       .catch(err => {
-        return reject(err);
+        reject(err);
       });
   });
 }
@@ -74,10 +74,10 @@ export function post(url, params = {}) {
   return new Promise((resolve, reject) => {
     axios.post(url, params).then(
       data => {
-        return resolve(data);
+        resolve(data);
       },
       err => {
-        return reject(err);
+        reject(err);
       }
     );
   });
@@ -94,10 +94,10 @@ export function patch(url, params = {}) {
   return new Promise((resolve, reject) => {
     axios.patch(url, params).then(
       data => {
-        return resolve(data);
+        resolve(data);
       },
       err => {
-        return reject(err);
+        reject(err);
       }
     );
   });
@@ -114,10 +114,10 @@ export function put(url, params = {}) {
   return new Promise((resolve, reject) => {
     axios.put(url, params).then(
       data => {
-        return resolve(data);
+        resolve(data);
       },
       err => {
-        return reject(err);
+        reject(err);
       }
     );
   });

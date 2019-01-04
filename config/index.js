@@ -33,7 +33,7 @@ module.exports = {
     proxyTable: {
       "/wst-customer/": {
         // 测试环境
-        target: "http://47.106.96.230:10001/wst-customer", // 接口域名
+        target: "http://47.106.96.141:20001/wst-customer", // 接口域名
         changeOrigin: true, //是否跨域
         pathRewrite: {
           "^/wst-customer": "" //需要rewrite重写的,
