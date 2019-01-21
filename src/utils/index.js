@@ -117,7 +117,8 @@ function padLeftZero(str) {
 }
 
 export function urlPre(url) {
-  const pre = "http://47.106.96.230:10001/wst-customer";
+
+  const pre = process.env.BASE_URL + "/wst-customer";
   return `${pre}${url}`;
 }
 
