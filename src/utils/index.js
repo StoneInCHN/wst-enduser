@@ -117,9 +117,7 @@ function padLeftZero(str) {
 }
 
 export function urlPre(url) {
-
-  const pre = process.env.BASE_URL + "/wst-customer";
-  return `${pre}${url}`;
+  return `${process.env.BASE_URL}${url}`;
 }
 
 export function toDecimal2(x) { 
