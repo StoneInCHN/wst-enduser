@@ -1,65 +1,70 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-const Home = () => import('@/pages/Home')
-const Order = () => import('@/pages/Order')
-const ListAddress = () => import('@/pages/address/ListAddress')
-const AddAddress = () => import('@/pages/address/AddAddress')
-const EditAddress = () => import('@/pages/address/editAddress')
-const OrderSuccess = () => import('@/pages/OrderSuccess')
-const WaterTickets = () => import('@/pages/WaterTickets')
-const PersonalOrder = () => import('@/pages/mine/Order')
-const Mine = () => import('@/pages/mine')
+const Home = () => import("@/pages/Home");
+const Order = () => import("@/pages/Order");
+const ListAddress = () => import("@/pages/address/ListAddress");
+const AddAddress = () => import("@/pages/address/AddAddress");
+const EditAddress = () => import("@/pages/address/editAddress");
+const OrderSuccess = () => import("@/pages/OrderSuccess");
+const WaterTickets = () => import("@/pages/WaterTickets");
+const PersonalOrder = () => import("@/pages/mine/Order");
+const Mine = () => import("@/pages/mine");
+const MySerialNumber = () => import("@/pages/MySerialNumber");
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Home',
+      path: "/",
+      name: "Home",
       component: Home
     },
     {
-      path: '/order',
-      name: 'Order',
+      path: "/order",
+      name: "Order",
       component: Order
     },
     {
-      path: '/listAddress',
-      name: 'ListAddress',
+      path: "/listAddress",
+      name: "ListAddress",
       component: ListAddress
     },
     {
-      path: '/addAddress',
-      name: 'AddAddress',
+      path: "/addAddress",
+      name: "AddAddress",
       component: AddAddress
     },
     {
-      path: '/editAddress',
-      name: 'EditAddress',
+      path: "/editAddress",
+      name: "EditAddress",
       component: EditAddress
     },
     {
-      path: '/orderSuccess',
-      name: 'OrderSuccess',
+      path: "/orderSuccess",
+      name: "OrderSuccess",
       component: OrderSuccess
     },
     {
-      path: '/waterTickets',
-      name: 'WaterTickets',
+      path: "/waterTickets",
+      name: "WaterTickets",
       component: WaterTickets
     },
     {
-      path: '/personalOrder',
-      name: 'PersonalOrder',
+      path: "/personalOrder",
+      name: "PersonalOrder",
       component: PersonalOrder
     },
     {
-      path: '/mine',
-      name: 'mine',
+      path: "/mine",
+      name: "mine",
       component: Mine
+    },
+    {
+      path: "/mySerialNumber",
+      name: "mySerialNumber",
+      component: MySerialNumber
     }
   ]
-})
-
+});

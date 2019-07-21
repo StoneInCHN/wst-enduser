@@ -2,6 +2,7 @@
   <div class="my-profile">
     <Header/>
     <CellGroup>
+        <Cell title="我的编号" label="查看编号信息" is-link @click="showSerialNumber"/>
         <Cell title="我的订单" label="查看订单信息" is-link @click="showOrder"/>
         <Cell title="我的地址"  label="收货地址管理" is-link @click="showAddr"/>
     </CellGroup>
@@ -23,6 +24,9 @@ export default {
     },
     showAddr(){
       this.$router.push("/listAddress");
+    },
+    showSerialNumber(){
+      this.$router.push("/mySerialNumber");
     }
   }
 };

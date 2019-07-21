@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     buyWater() {
-      console.log("订水");
+      //console.log("订水");
       this.$router.push("/buyWater");
     },
     buyTickets() {
