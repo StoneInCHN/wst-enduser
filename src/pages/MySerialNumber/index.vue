@@ -4,7 +4,7 @@
       <Field disabled v-model="serialNo" label="用户编号:" placeholder="请输入用户名" />
       <Field class="no-border" :disabled="disabled"  v-model="cellPhoneNum" label="编号成员:" placeholder="请输入用户名" type="textarea"  
        autosize :error-message="errorMessage"/>
-      <p class="tips"><span class="color-red">*</span>添加家庭成员电话，成员订水免报/免填地址</p>
+      <p class="tips"><span class="color-red">*</span>添加家庭成员电话，成员订水免报/免填地址, 最多只能绑定3个号码</p>
     </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       serialNo: "",
-      cellPhoneNum: "",
+      cellPhoneNum:"",
       isEdit: false,
       leftText: "",
       rightText: "编辑编号",
@@ -39,7 +39,14 @@ export default {
       if ("0000" === r.code) {
         if (r.msg) {
           this.serialNo = r.msg.serialNo;
-          this.cellPhoneNum = r.msg.contactPhone;
+          let phoneStr = r.msg.contactPhone
+          if(r.msg.contactPhone2){
+            phoneStr = phoneStr + `,${r.msg.contactPhone2}`
+          }
+          if(r.msg.contactPhone3){
+            phoneStr = phoneStr + `,${r.msg.contactPhone3}`
+          }
+          this.cellPhoneNum = phoneStr
         }
       } else {
         Toast.fail(r.msg);
