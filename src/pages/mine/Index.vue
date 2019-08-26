@@ -23,7 +23,7 @@ export default {
       this.$router.push("/personalOrder");
     },
     showAddr(){
-      this.$router.push("/listAddress");
+      this.$router.push({path:"/listAddress", query :{}});
     },
     showSerialNumber(){
       this.$router.push("/mySerialNumber");

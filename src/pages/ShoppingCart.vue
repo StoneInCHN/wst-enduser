@@ -135,7 +135,9 @@ export default {
       };
       this.$apis.order.getPreInfo(params).then(res => {
         this.setDefaultAddress(res.addrInfo);
-        this.$router.push("/order");
+        const query = res.gDist || {}
+        //this.$router.push("/order");
+        this.$router.push({ path: '/order', query});
       });
       
     },

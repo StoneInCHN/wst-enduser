@@ -34,25 +34,23 @@ export default {
     Stepper
   },
   computed: {
-    ...mapGetters([
-      "cartItems"
-    ]),
+    ...mapGetters(["cartItems"]),
     totalPrice() {
-      if(this.item.count, this.item.distPrice){
+      if ((this.item.count, this.item.distPrice)) {
         return numMul(this.item.count, this.item.distPrice);
-      }else{
-        return 0
+      } else {
+        return 0;
       }
     },
     totalOriginPrice() {
-      if(this.item.count, this.item.originPrice){
+      if ((this.item.count, this.item.originPrice)) {
         return numMul(this.item.count, this.item.originPrice);
-      }else{
-        return 0
+      } else {
+        return 0;
       }
     },
-    fullName(){
-      return `${this.item.gName} (${this.item.gSpec})`
+    fullName() {
+      return `${this.item.gName} (${this.item.gSpec})`;
     },
     count: {
       get() {
@@ -69,10 +67,8 @@ export default {
       set() {}
     }
   },
-  methods:{
-    ...mapActions([
-      "setCartItems"
-    ]),
+  methods: {
+    ...mapActions(["setCartItems"]),
     add() {
       this.findItems("add");
     },
@@ -88,11 +84,11 @@ export default {
         cartItems.forEach(item => {
           if (item.id === this.item.id) {
             if ("add" === type) {
-              ++item.count ;
+              ++item.count;
               flag = true;
               resultItems.push(item);
             } else if ("minus" === type) {
-              --item.count ;
+              --item.count;
               if (item.count > 0) {
                 resultItems.push(item);
               }
@@ -117,21 +113,21 @@ export default {
       this.setCartItems(resultItems);
     }
   },
-  filters:{
-    formatPrice (val) {
-      return toDecimal2(val)
+  filters: {
+    formatPrice(val) {
+      return toDecimal2(val);
     }
   }
 };
 </script>
 <style lang="less">
 .cart-item {
-  padding: 6px 6px 6px  20px;
-      padding: 6px 5px 6px 20px;
-    background-color: #fff;
-    height: 40px;
-    box-sizing: border-box;
-    font-size: 12px;
+  padding: 6px 6px 6px 20px;
+  padding: 6px 5px 6px 20px;
+  background-color: #fff;
+  height: 40px;
+  box-sizing: border-box;
+  font-size: 12px;
   .warp {
     display: flex;
     justify-content: flex-end;
@@ -148,8 +144,8 @@ export default {
       font-size: 12px;
     }
     .van-stepper {
-      width: 68px;
-      button{
+      width: 70px;
+      button {
         width: 20px;
         height: 20px;
         background-color: #00a0e9;
@@ -171,7 +167,7 @@ export default {
         width: 26px;
       }
       .van-stepper__input[disabled] {
-          color: #000;
+        color: #000;
       }
     }
   }

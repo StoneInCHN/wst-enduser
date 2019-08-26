@@ -7,14 +7,14 @@
     />
 		<div class="water-conent" :style="contentStyle">
 			<div class="sideBar">
-				<BadgeGroup  :active-key="activeKey">
-					<Badge 
+				<Sidebar  :active-key="activeKey">
+					<SidebarItem 
             v-for="brand in brands"  
             :key="brand.id" 
             :title="brand.brandName" 
             @click="clickBrand" 
           />
-				</BadgeGroup>
+				</Sidebar>
 				<div class="profile">
 					<Button @click="mine">我的</Button>
 				</div>
@@ -47,7 +47,7 @@
         @blur="checkUserNo"
         :error-message="errorMsgshow.userNo"
       />
-      <p>二维码下方就有用户编号哟! <span>没有?</span></p>
+      <p>二维码下方就有用户编号。 <span @click="showTips">没有?</span></p>
       <Button size="large" :loading="bindLoading" @click="onConfirm">确定</Button>
     </Popup>
 	</div>
@@ -55,8 +55,8 @@
 <script>
 import vue from "vue";
 import {
-  BadgeGroup,
-  Badge,
+  Sidebar,
+  SidebarItem,
   Button,
   Popup,
   Field,
@@ -77,8 +77,8 @@ export default {
   name: "BuyWater",
   components: {
     Header,
-    Badge,
-    BadgeGroup,
+    Sidebar,
+    SidebarItem,
     Button,
     WaterItem,
     ShoppingCart,
@@ -92,7 +92,7 @@ export default {
     Dialog
   },
   mounted() {
-    this.initData()
+    this.initData();
   },
   data() {
     return {
@@ -118,7 +118,6 @@ export default {
       "orderNotice",
       "shopInfo",
       "noticeFlag",
-      "shopInfo",
       "isOpen"
     ]),
     brands() {
@@ -202,7 +201,7 @@ export default {
               Toast("绑定成功");
               this.bindLoading = false;
               this.showQRCodeBinding = false;
-              this.initData()
+              this.initData();
             } else {
               Toast.fail(r.desc);
               this.bindLoading = false;
@@ -298,6 +297,14 @@ export default {
         .catch(e => {
           console.log(e);
         });
+    },
+    showTips() {
+      Dialog.alert({
+        message:
+          "未找到用户编号, 可以拨打二维码上方的送水电话, 联系水站查询你的编号。"
+      }).then(() => {
+        // on close
+      });
     }
   }
 };
@@ -373,16 +380,19 @@ export default {
       text-align: center;
       padding: 0.5rem 0;
     }
+    .van-field{
+      font-size: 18px;
+    }
     .van-button--default {
       margin-top: 0.5rem;
       background-color: #00a0e9;
       color: #fff;
     }
-    p{
+    p {
       padding: 10px 5px;
       font-size: 14px;
       color: darkorange;
-      span{
+      span {
         color: green;
       }
     }

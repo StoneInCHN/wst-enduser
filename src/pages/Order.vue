@@ -36,7 +36,7 @@
                 {{payMethodName}}
               </p>
           </Cell>
-          <Actionsheet v-model="showPayMethod" :actions="actions"  cancel-text="取消"/>
+          <ActionSheet v-model="showPayMethod" :actions="actions"  cancel-text="取消"/>
         </CellGroup>
       </section>
 		</div>
@@ -56,7 +56,7 @@ import {
   Cell,
   CellGroup,
   Tag,
-  Actionsheet,
+  ActionSheet,
   Toast
 } from "vant";
 import OrderItem from "./OrderDetailsItem";
@@ -70,12 +70,13 @@ export default {
     Cell,
     CellGroup,
     Tag,
-    Actionsheet,
+    ActionSheet,
     OrderItem,
     Toast
   },
   mounted() {
-    console.log("mounted ", this.cartItems);
+    //console.log("mounted ", this.cartItems);
+    console.log(this.$route.query)
   },
   data() {
     return {
@@ -90,9 +91,6 @@ export default {
       ]
     };
   },
-  mounted() {
-    console.log("defaultAddress", this.defaultAddress);
-  },
   computed: {
     ...mapGetters(["cartItems", "defaultAddress", "userId", "qrCodeId","entityId", "isOpen"]),
     hasDefaultAddress() {
@@ -100,7 +98,6 @@ export default {
     },
     count: {
       get() {
-        console.log("cartItems", this.cartItems);
         let count = 0;
         if (this.cartItems && this.cartItems.length > 0) {
           this.cartItems.forEach(item => {
@@ -115,7 +112,12 @@ export default {
       let price = 0;
       if (this.cartItems && this.cartItems.length > 0) {
         this.cartItems.forEach(item => {
-          let total = numMul(item.distPrice, item.count);
+          let distPrice = item.distPrice
+          //获取优惠价
+          if(this.$route.query && this.$route.query[item.id]){
+            distPrice = this.$route.query[item.id] 
+          }
+          let total = numMul(distPrice, item.count);
           price = numAdd(price, total);
         });
       }
@@ -137,6 +139,7 @@ export default {
     ...mapActions(["setCartItems","setSuccessOrder"]),
     addAddress() {
       this.$router.push("/listAddress");
+      //this.$router.push({path:"/listAddress", query :{selectAdd: true}});
     },
     changePayMethod() {
       this.showPayMethod = !this.showPayMethod;
@@ -146,7 +149,8 @@ export default {
       this.showPayMethod = false;
     },
     selectAddress() {
-      this.$router.push("/listAddress");
+      //this.$router.push("/listAddress");
+      this.$router.push({path:"/listAddress", query :{selectAdd: true}});
     },
     submitHandler() {
       const params = {
@@ -157,9 +161,9 @@ export default {
         gIds: this.gIds,
         entityId: this.entityId
       };
-      console.log({ params });
+      //console.log({ params });
       this.$apis.order.createSO(params).then(r => {
-        console.log({ r });
+        //console.log({ r });
         Toast.success({
           message:"订单创建成功",
           mask: true,

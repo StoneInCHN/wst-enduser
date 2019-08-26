@@ -115,7 +115,6 @@ export default {
         this.user.qrCodeId = this.qrCodeId;
         this.user.isDefault = true;
         this.$apis.address.newAddr(this.user).then(r => {
-          console.log({ r });
           if (r && r.code === "0000") {
             Toast(r.desc);
             setTimeout(() => {

@@ -5,6 +5,7 @@
   @add="onAdd"
   @edit="onEdit"
   @select="select"
+  @click-item ="clickItem"
 />
 </template>
 <script>
@@ -17,6 +18,7 @@ export default {
     Toast
   },
   mounted() {
+    console.log(this.$route.query);
     Toast.clear();
     const params = {
       qrCodeId: this.qrCodeId,
@@ -35,7 +37,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["qrCodeId","userId"]),
+    ...mapGetters(["qrCodeId", "userId"]),
     lists() {
       let lists = [];
       if (this.addrs && this.addrs.length > 0) {
@@ -53,7 +55,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setAddressLists","setDefaultAddress"]),
+    ...mapActions(["setAddressLists", "setDefaultAddress"]),
     setDefault() {
       if (this.addrs && this.addrs.length > 0) {
         this.addrs.forEach(item => {
@@ -74,10 +76,13 @@ export default {
         }
       });
     },
+    clickItem(item, index) {
+      console.log({ item, index });
+    },
     select(item, index) {
       this.chosenAddressId = item.id;
       let defaultAddr = {};
-      let lists = []
+      let lists = [];
       this.addrs.forEach(addr => {
         if (addr.id === item.id) {
           addr.isDefault = true;
@@ -85,11 +90,35 @@ export default {
         } else {
           addr.isDefault = false;
         }
-        lists.push(addr)
+        lists.push(addr);
       });
-      this.setAddressLists(lists)
-      this.setDefaultAddress(defaultAddr)
-      this.$router.go(-1)
+      this.setAddressLists(lists);
+      this.setDefaultAddress(defaultAddr);
+      this.resetDefaultAddress(defaultAddr);
+    },
+    resetDefaultAddress(params) {
+      const { qrCodeId, userId } = this;
+      const defaultParams = {
+        isDefault: true,
+        qrCodeId,
+        userId,
+        entityId: params.id
+      };
+      const p = Object.assign({}, params, defaultParams);
+      delete p.id;
+      this.$apis.address.newAddr(p).then(r => {
+        if (r && r.code === "0000") {
+          Toast.clear()
+          const selectAdd = this.$route.query["selectAdd"];
+          if (selectAdd) {
+            setTimeout(() => {
+              this.$router.go(-1);
+            });
+          }
+        } else {
+          Toast.fail(r.desc);
+        }
+      });
     }
   }
 };

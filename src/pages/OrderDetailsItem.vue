@@ -21,6 +21,7 @@ export default {
       required: true
     }
   },
+   
   computed: {
     fullName() {
       return `${this.item.gName} (${this.item.gSpec})`;
@@ -29,7 +30,12 @@ export default {
       return numMul(this.item.originPrice, this.item.count);
     },
     totalDistPrice() {
-      return numMul(this.item.distPrice, this.item.count);
+      let price = this.item.distPrice
+      //获取优惠价
+      if(this.$route.query && this.$route.query[this.item.id]){
+        price = this.$route.query[this.item.id] 
+      }
+      return numMul(price, this.item.count);
     },
     imgStyle() {
       let style = {};

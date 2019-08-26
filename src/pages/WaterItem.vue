@@ -110,16 +110,14 @@ export default {
       }
       this.setCartItems(resultItems);
     },
-    viewImg(){
-      const url = urlPre(this.goods.largePicUrl)
-      ImagePreview([
-        url
-      ])
+    viewImg() {
+      const url = urlPre(this.goods.largePicUrl);
+      ImagePreview([url]);
     }
   },
-  filters:{
-    formatPrice (val) {
-      return toDecimal2(val)
+  filters: {
+    formatPrice(val) {
+      return toDecimal2(val);
     }
   }
 };
@@ -174,13 +172,13 @@ export default {
     }
     .van-stepper {
       float: right;
-      width: 68px;
-      margin-right: 10px;
+      width: 70px;
+      margin-right: 8px;
       .van-stepper__minus--disabled {
         border-color: #fff;
         background-color: #fff;
       }
-      button{
+      button {
         width: 20px;
         height: 20px;
         background-color: #00a0e9;
@@ -202,12 +200,12 @@ export default {
         width: 26px;
       }
       .van-stepper__input[disabled] {
-          color: #666;
+        color: #323233;
       }
-    }    
+    }
     .hasValue {
       .van-stepper__input {
-        color:#fff !important ;
+        color: #fff !important ;
       }
     }
   }

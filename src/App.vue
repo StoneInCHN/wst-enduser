@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import "vant/lib/vant-css/icon-local.css";
+//import "vant/lib/vant-css/icon-local.css";
 
 export default {
   name: "App"

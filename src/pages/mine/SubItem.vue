@@ -4,7 +4,7 @@
             <p>{{item.gName}}</p>
             <p class="price-info">
                 <span>X{{item.count}}</span>
-                <span class="price">{{item.count * item.amount | formatPrice}}</span>
+                <span class="price">{{ item.amount | formatPrice}}</span>
             </p>
         </section>
 </template>

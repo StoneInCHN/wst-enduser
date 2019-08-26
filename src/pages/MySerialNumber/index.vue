@@ -135,4 +135,15 @@ export default {
   }
 }
 </style>
+<style lang="less">
+.my-serial-number{
+  .van-cell__value{
+    color: #000;
+  }
+  .van-field__control:disabled{
+    color: #000;
+  }
+}
+</style>
+
 

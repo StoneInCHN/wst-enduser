@@ -7,7 +7,7 @@
     </CellGroup>
     <div class="title">收货地址</div>
     <CellGroup>
-      <Field v-model="user.addr" type="textarea" :error-message="errorMsgshow.addr"  label="小区/大厦/学校 :" placeholder="例：中德英伦联邦" rows="1" @blur="validateCheck('addr')"
+      <Field v-model="user.addr" required type="textarea" :error-message="errorMsgshow.addr"  label="小区/大厦/学校 :" placeholder="例：中德英伦联邦" rows="1" @blur="validateCheck('addr')"
         autosize/>
       <Field v-model="user.doorNum" required label="楼号-门牌号 :" :error-message="errorMsgshow.doorNum" placeholder="例：16号楼1001室" @blur="validateCheck('doorNum')"/>
     </CellGroup>
