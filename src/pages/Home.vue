@@ -47,7 +47,7 @@
         @blur="checkUserNo"
         :error-message="errorMsgshow.userNo"
       />
-      <p>二维码下方就有用户编号。 <span @click="showTips">没有?</span></p>
+      <p>二维码上方就有用户编号。 <span @click="showTips">没有?</span></p>
       <Button size="large" :loading="bindLoading" @click="onConfirm">确定</Button>
     </Popup>
 	</div>

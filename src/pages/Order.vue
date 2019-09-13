@@ -76,7 +76,8 @@ export default {
   },
   mounted() {
     //console.log("mounted ", this.cartItems);
-    console.log(this.$route.query)
+    console.log(this.$route.query);
+    console.log(this.isOpen)
   },
   data() {
     return {
@@ -92,9 +93,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["cartItems", "defaultAddress", "userId", "qrCodeId","entityId", "isOpen"]),
+    ...mapGetters([
+      "cartItems",
+      "defaultAddress",
+      "userId",
+      "qrCodeId",
+      "entityId",
+      "isOpen"
+    ]),
     hasDefaultAddress() {
-      return !!this.defaultAddress;
+      return this.defaultAddress && this.defaultAddress.id;
     },
     count: {
       get() {
@@ -112,10 +120,10 @@ export default {
       let price = 0;
       if (this.cartItems && this.cartItems.length > 0) {
         this.cartItems.forEach(item => {
-          let distPrice = item.distPrice
+          let distPrice = item.distPrice;
           //获取优惠价
-          if(this.$route.query && this.$route.query[item.id]){
-            distPrice = this.$route.query[item.id] 
+          if (this.$route.query && this.$route.query[item.id]) {
+            distPrice = this.$route.query[item.id];
           }
           let total = numMul(distPrice, item.count);
           price = numAdd(price, total);
@@ -132,11 +140,11 @@ export default {
       return gIds;
     },
     addrId() {
-      return this.defaultAddress.id;
+      return this.defaultAddress ? this.defaultAddress.id : null
     }
   },
   methods: {
-    ...mapActions(["setCartItems","setSuccessOrder"]),
+    ...mapActions(["setCartItems", "setSuccessOrder"]),
     addAddress() {
       this.$router.push("/listAddress");
       //this.$router.push({path:"/listAddress", query :{selectAdd: true}});
@@ -150,9 +158,13 @@ export default {
     },
     selectAddress() {
       //this.$router.push("/listAddress");
-      this.$router.push({path:"/listAddress", query :{selectAdd: true}});
+      this.$router.push({ path: "/listAddress", query: { selectAdd: true } });
     },
     submitHandler() {
+      if (!this.addrId) {
+        Toast("请选择收货地址");
+        return false;
+      }
       const params = {
         qrCodeId: this.qrCodeId,
         addrId: this.addrId,
@@ -165,22 +177,22 @@ export default {
       this.$apis.order.createSO(params).then(r => {
         //console.log({ r });
         Toast.success({
-          message:"订单创建成功",
+          message: "订单创建成功",
           mask: true,
           forbidClick: true,
-          duration:1000
-        })
-        this.setSuccessOrder(r)
-        this.setCartItems([])
-        setTimeout(()=>{
+          duration: 1000
+        });
+        this.setSuccessOrder(r);
+        this.setCartItems([]);
+        setTimeout(() => {
           this.$router.replace("/orderSuccess");
-        },500)
+        }, 500);
       });
     }
   },
-  filters:{
-    formatPrice (val) {
-      return toDecimal2(val)
+  filters: {
+    formatPrice(val) {
+      return toDecimal2(val);
     }
   }
 };

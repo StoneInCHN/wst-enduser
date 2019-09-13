@@ -89,7 +89,7 @@ export default {
       }
     },
     save() {
-      const mobileRegExp = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))(,((0\d{2,3}-\d{7,8})|(1[3584]\d{9})))*$/;
+      const mobileRegExp = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))((,|，)((0\d{2,3}-\d{7,8})|(1[3584]\d{9})))*$/;
       if (mobileRegExp.test(this.cellPhoneNum)) {
         const params = {
           userId: this.userId,

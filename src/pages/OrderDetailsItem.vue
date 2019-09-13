@@ -1,10 +1,13 @@
 <template>
 	<li class="order-details-list-item">
-    <div class="item-img" :style="imgStyle"/>
-		<p>
-			<span>{{fullName}}</span>
-      <span> X {{item.count}}</span>
-		</p>
+    <div class="item-img" :style="imgStyle"></div>
+		<div>
+			<p>{{fullName}}</p>
+      <p>
+        <span> X {{item.count}}</span>
+        <span class="preferential" v-if="hasPreferential">大客服优惠</span>
+      </p>
+		</div>
 		<div class="price">
 			<span>￥{{totalDistPrice | formatPrice}}</span>
       <span>￥{{totalOriginPrice | formatPrice}}</span>
@@ -21,7 +24,6 @@ export default {
       required: true
     }
   },
-   
   computed: {
     fullName() {
       return `${this.item.gName} (${this.item.gSpec})`;
@@ -45,6 +47,9 @@ export default {
         };
       }
       return style;
+    },
+    hasPreferential(){
+      return this.$route.query && this.$route.query[this.item.id]
     }
   },
   filters:{
@@ -77,8 +82,13 @@ export default {
     font-size: 13px;
     flex: 1;
     padding-left: 20px;
-    span{
-      display: block;
+    span.preferential{
+      margin-left: 10px;
+      background: #00a0e9;
+      color: #fff;
+      font-size: 10px;
+      padding: 1px 4px;
+      border-radius: 5px;
     }
   }
   .price {

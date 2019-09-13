@@ -200,7 +200,7 @@ export default {
         width: 26px;
       }
       .van-stepper__input[disabled] {
-        color: #323233;
+        color: #333;
       }
     }
     .hasValue {
